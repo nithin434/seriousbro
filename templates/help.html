@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Resources • Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .emerald { color: #059669; }
+        .emerald-bg { background: #059669; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .card { background: #fff; border-radius: 1.25rem; box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.08); transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12); }
+        .header-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; text-decoration: none; }
+        .header-btn.improve { background: #f0fdf4; color: #059669; border: 1px solid #059669; }
+        .header-btn.improve:hover { background: #059669; color: #fff; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center">
+                    <span class="text-2xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="header-btn improve flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Help & Resources</h1>
+            <p class="text-gray-600 mt-2">Get support and find answers to your questions</p>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Quick Support Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Email Support</h3>
+                    <p class="text-sm text-gray-600 mb-3">Get direct help from our support team</p>
+                    <a href="mailto:support@syntexa.ai" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                        support@syntexa.ai →
+                    </a>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Documentation</h3>
+                    <p class="text-sm text-gray-600 mb-3">Browse guides and tutorials</p>
+                    <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">
+                        View docs →
+                    </a>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-video text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Video Tutorials</h3>
+                    <p class="text-sm text-gray-600 mb-3">Watch step-by-step guides</p>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 text-sm font-medium">
+                        Watch videos →
+                    </a>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-comments text-orange-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Community</h3>
+                    <p class="text-sm text-gray-600 mb-3">Connect with other users</p>
+                    <a href="#" class="text-orange-600 hover:text-orange-700 text-sm font-medium">
+                        Join community →
+                    </a>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="card p-8">
+                <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                    <div class="text-2xl font-bold">Frequently Asked Questions</div>
+                    <div class="text-sm text-gray-200">Find quick answers to common questions</div>
+                </div>
+                <div class="space-y-4">
+                    {% if faqs %}
+                        {% for faq in faqs %}
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">{{ faq.question }}</h3>
+                            <p class="text-gray-600 text-sm">{{ faq.answer }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">How does ATS optimization work?</h3>
+                            <p class="text-gray-600 text-sm">Our AI analyzes your resume against job requirements and suggests improvements to increase your chances of passing through Applicant Tracking Systems.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">Is my data secure?</h3>
+                            <p class="text-gray-600 text-sm">Yes, we use industry-standard encryption and never share your personal information with third parties.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">Can I delete my account?</h3>
+                            <p class="text-gray-600 text-sm">Yes, you can request account deletion at any time. All your data will be permanently removed from our servers.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="card p-8">
+                <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                    <div class="text-2xl font-bold">Contact Support</div>
+                    <div class="text-sm text-gray-200">Can't find what you're looking for? Send us a message</div>
+                </div>
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Brief description of your issue">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Describe your issue in detail..."></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-6 py-2 emerald-bg hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors"></button>
+                            <i class="fas fa-paper-plane mr-2"></i>Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

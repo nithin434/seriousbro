@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Syntexa.app | AI-Powered Career Optimization</title>
+    <meta name="description" content="Sign in to Syntexa.app - The AI-powered platform that optimizes your career with resume analysis, professional insights, and job matching.">
+    <meta name="keywords" content="Syntexa, career optimization, AI resume analysis, job matching, professional development, career growth, login">
+    <meta name="author" content="Syntexa.app">
+    <meta property="og:title" content="Login - Syntexa.app | AI-Powered Career Optimization">
+    <meta property="og:description" content="Sign in to your Syntexa.app account and continue optimizing your career with AI-powered insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syntexa.app/login">
+    <meta property="og:site_name" content="Syntexa.app">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Login - Syntexa.app">
+    <meta name="twitter:description" content="AI-powered career optimization platform">
+    <link rel="icon" type="image/x-icon" href="https://syntexa.app/favicon.ico">
+    <link rel="apple-touch-icon" href="https://syntexa.app/apple-touch-icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .brand-syn { color: #059669; }
+        .brand-        
+        .auth-container {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f9fafb 100%);
+            min-height: 100vh;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        .form-input:focus {
+            border-color: #059669;
+            ring: 2px;
+            ring-color: #059669;
+            ring-opacity: 0.2;
+        }
+        .btn-primary {
+            background: #059669;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #059669;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .alert {
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .alert-error {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #059669;
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+<body class="auth-container">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="flex justify-center items-center mb-6">
+                    <span class="text-4xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
+                <p class="text-gray-600">Sign in to your Syntexa.app account to continue optimizing your career</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-card p-8">
+                <form id="loginForm" class="space-y-6">
+                    <!-- Alert Container -->
+                    <div id="alertContainer" class="hidden"></div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Enter your email"
+                            >
+                            <i class="fas fa-envelope absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Enter your password"
+                            >
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                class="absolute right-3 top-4 text-gray-400 hover:text-gray-600"
+                            >
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                            >
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                                Remember me
+                            </label>
+                        </div>
+                        <div class="text-sm">
+                            <a href="#" id="forgotPasswordLink" class="font-medium text-emerald-600 hover:text-emerald-500">
+                                Forgot your password?
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button
+                            type="submit"
+                            id="loginBtn"
+                            class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                        >
+                            <span id="loginBtnText">Sign In</span>
+                            <div id="loginSpinner" class="loading-spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Sign Up Link -->
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Don't have an account?
+                            <a href="/signup" class="font-semibold text-emerald-600 hover:text-emerald-500">
+                                Create one now
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Features -->
+            <div class="text-center">
+                <p class="text-sm text-gray-500 mb-4">Trusted by professionals worldwide on Syntexa.app</p>
+                <div class="flex justify-center space-x-6 text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt mr-1"></i>
+                        <span>Secure</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-robot mr-1"></i>
+                        <span>AI-Powered</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-1"></i>
+                        <span>24/7 Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <!-- Step 1: Email Input -->
+            <div id="resetEmailStep">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Reset Password</h3>
+                <form id="forgotPasswordForm">
+                    <div class="mb-4">
+                        <label for="resetEmail" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input
+                            type="email"
+                            id="resetEmail"
+                            required
+                            class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                            placeholder="Enter your email"
+                        >
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            type="button"
+                            id="cancelReset"
+                            class="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            id="sendResetBtn"
+                            class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                        >
+                            Send Reset Code
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: OTP Verification -->
+            <div id="resetOtpStep" class="hidden">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Verify Reset Code</h3>
+                <p class="text-gray-600 text-sm mb-4">We've sent a verification code to your email address</p>
+                <form id="verifyResetOtpForm">
+                    <div class="mb-4">
+                        <label for="resetOtp" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Verification Code
+                        </label>
+                        <input
+                            type="text"
+                            id="resetOtp"
+                            required
+                            maxlength="6"
+                            class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none text-center text-lg tracking-widest"
+                            placeholder="000000"
+                        >
+                    </div>
+                    <div class="flex gap-3 mb-3">
+                        <button
+                            type="button"
+                            id="backToEmail"
+                            class="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="submit"
+                            id="verifyOtpBtn"
+                            class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                        >
+                            Verify Code
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <button
+                            type="button"
+                            id="resendResetCode"
+                            class="text-emerald-600 hover:text-emerald-500 font-medium text-sm"
+                        >
+                            Resend Code
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: New Password -->
+            <div id="resetPasswordStep" class="hidden">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Set New Password</h3>
+                <form id="resetPasswordForm">
+                    <div class="mb-4">
+                        <label for="newPassword" class="block text-sm font-semibold text-gray-700 mb-2">
+                            New Password
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="newPassword"
+                                required
+                                minlength="8"
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Enter new password"
+                            >
+                            <button
+                                type="button"
+                                id="toggleNewPassword"
+                                class="absolute right-3 top-4 text-gray-400 hover:text-gray-600"
+                            >
+                                <i class="fas fa-eye" id="newPasswordEyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirmNewPassword" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Confirm New Password
+                        </label>
+                        <input
+                            type="password"
+                            id="confirmNewPassword"
+                            required
+                            class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                            placeholder="Confirm new password"
+                        >
+                        <div id="passwordMatchMessage" class="text-sm mt-1 hidden"></div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            type="button"
+                            id="cancelPasswordReset"
+                            class="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            id="resetPasswordBtn"
+                            class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                        >
+                            Reset Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginSpinner = document.getElementById('loginSpinner');
+        const alertContainer = document.getElementById('alertContainer');
+        
+        // Modal elements
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const cancelReset = document.getElementById('cancelReset');
+        
+        // Reset password flow elements
+        const resetEmailStep = document.getElementById('resetEmailStep');
+        const resetOtpStep = document.getElementById('resetOtpStep');
+        const resetPasswordStep = document.getElementById('resetPasswordStep');
+        const verifyResetOtpForm = document.getElementById('verifyResetOtpForm');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const backToEmail = document.getElementById('backToEmail');
+        const resendResetCode = document.getElementById('resendResetCode');
+        const toggleNewPassword = document.getElementById('toggleNewPassword');
+        const newPasswordEyeIcon = document.getElementById('newPasswordEyeIcon');
+        const cancelPasswordReset = document.getElementById('cancelPasswordReset');
+        
+        let resetUserEmail = '';
+
+        // Password toggle functionality
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        // New password toggle functionality
+        toggleNewPassword.addEventListener('click', function() {
+            const newPasswordInput = document.getElementById('newPassword');
+            const type = newPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            newPasswordInput.setAttribute('type', type);
+            newPasswordEyeIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        // Reset password flow functions
+        function showResetStep(step) {
+            resetEmailStep.classList.add('hidden');
+            resetOtpStep.classList.add('hidden');
+            resetPasswordStep.classList.add('hidden');
+            
+            if (step === 'email') {
+                resetEmailStep.classList.remove('hidden');
+            } else if (step === 'otp') {
+                resetOtpStep.classList.remove('hidden');
+            } else if (step === 'password') {
+                resetPasswordStep.classList.remove('hidden');
+            }
+        }
+
+        function closeResetModal() {
+            forgotPasswordModal.classList.add('hidden');
+            forgotPasswordModal.classList.remove('flex');
+            showResetStep('email');
+            resetUserEmail = '';
+            // Clear all form inputs
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('resetOtp').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+        }
+
+        // Password match validation
+        function checkPasswordMatch() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            const messageEl = document.getElementById('passwordMatchMessage');
+            
+            if (confirmPassword && newPassword !== confirmPassword) {
+                messageEl.textContent = 'Passwords do not match';
+                messageEl.className = 'text-sm text-red-500 mt-1';
+                messageEl.classList.remove('hidden');
+                return false;
+            } else if (confirmPassword && newPassword === confirmPassword) {
+                messageEl.textContent = 'Passwords match';
+                messageEl.className = 'text-sm text-green-600 mt-1';
+                messageEl.classList.remove('hidden');
+                return true;
+            } else {
+                messageEl.classList.add('hidden');
+                return true;
+            }
+        }
+
+        document.getElementById('newPassword').addEventListener('input', checkPasswordMatch);
+        document.getElementById('confirmNewPassword').addEventListener('input', checkPasswordMatch);
+
+        // Show alert function
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            alertContainer.classList.remove('hidden');
+        }
+
+        // Hide alert function
+        function hideAlert() {
+            alertContainer.classList.add('hidden');
+        }
+
+        // Set loading state
+        function setLoading(loading) {
+            if (loading) {
+                loginBtnText.textContent = 'Signing In...';
+                loginSpinner.classList.remove('hidden');
+                loginBtn.disabled = true;
+            } else {
+                loginBtnText.textContent = 'Sign In';
+                loginSpinner.classList.add('hidden');
+                loginBtn.disabled = false;
+            }
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlert();
+            setLoading(true);
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Basic validation
+            if (!email || !password) {
+                showAlert('Please fill in all fields');
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Store tokens using authManager
+                    if (data.access_token && data.refresh_token) {
+                        authManager.storeAuth(data.access_token, data.refresh_token, data.user);
+                    }
+                    
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect after login using auth manager
+                    setTimeout(() => {
+                        authManager.redirectAfterLogin();
+                    }, 1000);
+                } else {
+                    showAlert(data.error || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('Network error. Please check your connection and try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Forgot password modal
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotPasswordModal.classList.remove('hidden');
+            forgotPasswordModal.classList.add('flex');
+            showResetStep('email');
+        });
+
+        // Modal close handlers
+        cancelReset.addEventListener('click', closeResetModal);
+        backToEmail.addEventListener('click', () => showResetStep('email'));
+        cancelPasswordReset.addEventListener('click', closeResetModal);
+
+        // Step 1: Send reset email
+        forgotPasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const resetEmail = document.getElementById('resetEmail').value.trim();
+            
+            if (!resetEmail) {
+                alert('Please enter your email address');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: resetEmail
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resetUserEmail = resetEmail;
+                    showResetStep('otp');
+                } else {
+                    alert(data.error || 'Failed to send reset code');
+                }
+            } catch (error) {
+                console.error('Forgot password error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Step 2: Verify OTP
+        verifyResetOtpForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const otp = document.getElementById('resetOtp').value.trim();
+            
+            if (!otp || otp.length !== 6) {
+                alert('Please enter a valid 6-digit code');
+                return;
+            }
+
+            try {
+                // We'll verify the OTP when submitting the new password
+                // For now, just move to the next step
+                showResetStep('password');
+            } catch (error) {
+                console.error('OTP verification error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Step 3: Reset Password
+        resetPasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            const otp = document.getElementById('resetOtp').value.trim();
+            
+            if (!newPassword || !confirmPassword) {
+                alert('Please fill in all password fields');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: resetUserEmail,
+                        otp: otp,
+                        new_password: newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Password reset successfully! You can now sign in with your new password.');
+                    closeResetModal();
+                } else {
+                    alert(data.error || 'Failed to reset password');
+                }
+            } catch (error) {
+                console.error('Password reset error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Resend reset code
+        resendResetCode.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: resetUserEmail
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Reset code resent to your email!');
+                } else {
+                    alert(data.error || 'Failed to resend code');
+                }
+            } catch (error) {
+                console.error('Resend error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Close modal when clicking outside
+        forgotPasswordModal.addEventListener('click', function(e) {
+            if (e.target === forgotPasswordModal) {
+                closeResetModal();
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', async function() {
+            // Check authentication status more thoroughly
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    // User is authenticated, safe to redirect
+                    console.log('User is authenticated, redirecting...');
+                    authManager.redirectAfterLogin();
+                } else {
+                    // User is not authenticated, clear any stale auth data
+                    authManager.clearAuth();
+                }
+            } catch (error) {
+                console.log('Auth status check failed:', error);
+                authManager.clearAuth();
+            }
+        });
+    </script>
+</body>
+</html>

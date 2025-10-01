@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Analysis Results • SYNTEXA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        /* Brand colors */
+        .brand-syn { color: #10b981; }
+        .brand-texa { color: #111827; }
+        
+        /* Card styles */
+        .card { 
+            background: white; 
+            border-radius: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: all 0.3s ease;
+        }
+        .card:hover { 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px solid #d1d5db;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-secondary:hover {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Score progress bars */
+        .score-bar {
+            background: #f3f4f6;
+            border-radius: 1rem;
+            overflow: hidden;
+            height: 2rem;
+            position: relative;
+        }
+        .score-fill {
+            height: 100%;
+            color: white;
+            text-align: center;
+            line-height: 2rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border-radius: 1rem;
+            transition: width 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .score-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        .score-excellent { background: linear-gradient(135deg, #10b981, #059669); }
+        .score-good { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .score-average { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .score-poor { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 4rem;
+            height: 4rem;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Pulse animation for loading text */
+        .loading-text {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Header styles */
+        .header-btn { 
+            padding: 0.5rem 1rem; 
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            text-decoration: none;
+            border: 2px solid transparent;
+        }
+        .header-btn.primary { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .header-btn.primary:hover { 
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .header-btn.secondary { 
+            background: #f8fafc; 
+            color: #10b981; 
+            border-color: #10b981;
+        }
+        .header-btn.secondary:hover { 
+            background: #10b981; 
+            color: white;
+            border-color: #10b981;
+        }
+        
+        /* Tags */
+        .tag {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            color: #047857;
+            border: 1px solid #10b981;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .tag:hover {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            transform: scale(1.05);
+        }
+        
+        /* Platform badge */
+        .platform-badge {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.875rem;
+        }
+        
+        /* Icon backgrounds */
+        .icon-bg-green { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .icon-bg-blue { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+        .icon-bg-purple { background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%); }
+        .icon-bg-orange { background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%); }
+        .icon-bg-red { background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%); }
+        .icon-bg-yellow { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+            .scores-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .suggestions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .scores-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-200/60 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center group">
+                    <span class="text-2xl font-extrabold tracking-tight transition-transform group-hover:scale-105">
+                        <span class="brand-syn">SYN</span><span class="brand-texa">TEXA</span>
+                    </span>
+                    <span class="ml-3 text-sm font-medium text-gray-500 border-l border-gray-300 pl-3">AI Career Tools</span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="/my-resumes" class="header-btn secondary flex items-center">
+                    <i class="fas fa-file-alt mr-2"></i>My Resumes
+                </a>
+                <a href="/" class="header-btn secondary flex items-center">
+                    <i class="fas fa-chart-pie mr-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div id="results">
+            <!-- Enhanced Loading State -->
+            <div class="text-center py-16">
+                <div class="loading-spinner mb-6"></div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-3 loading-text">
+                    <i class="fas fa-chart-line text-emerald-600 mr-3"></i>
+                    Analyzing Your Profile
+                </h2>
+                <p class="text-lg text-gray-600 mb-8 loading-text">
+                    Our AI is gathering comprehensive insights about your professional presence...
+                </p>
+                
+                <!-- Loading Progress Indicators -->
+                <div class="max-w-2xl mx-auto">
+                    <div class="card p-8">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6">Analysis in Progress</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center text-left p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-emerald-900">Profile Data Extraction</h4>
+                                    <p class="text-emerald-700 text-sm">Gathering profile information and content</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-left p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-4 loading-text">
+                                    <i class="fas fa-brain text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-blue-900">AI Analysis Engine</h4>
+                                    <p class="text-blue-700 text-sm">Processing content with advanced algorithms</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-left p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-lightbulb text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Generating Recommendations</h4>
+                                    <p class="text-gray-700 text-sm">Creating personalized insights and suggestions</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-4 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-lg">
+                            <p class="text-sm text-emerald-700 font-medium text-center">
+                                <i class="fas fa-clock mr-2"></i>
+                                This usually takes 30-60 seconds for comprehensive analysis
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authManager.isAuthenticated()) {
+                authManager.redirectToLogin();
+            }
+        });
+
+        async function loadResults() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const profileUrl = params.get('profile_url') || '';
+                const platform = params.get('platform') || '';
+
+                console.log('Current URL:', window.location.href);
+                console.log('URL Parameters:', window.location.search);
+                console.log('Loading results for:', profileUrl, 'Platform:', platform);
+
+                if (!profileUrl) {
+                    console.log('No profile URL in parameters, checking localStorage...');
+                    
+                    // Try to get from localStorage as fallback
+                    const lastAnalysis = localStorage.getItem('lastProfileAnalysis');
+                    if (lastAnalysis) {
+                        try {
+                            const analysisData = JSON.parse(lastAnalysis);
+                            console.log('Found cached analysis:', analysisData);
+                            if (analysisData.profile_url) {
+                                // Redirect with proper parameters
+                                window.location.href = `/profile-results?profile_url=${encodeURIComponent(analysisData.profile_url)}&platform=${encodeURIComponent(analysisData.platform || 'linkedin')}`;
+                                return;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing cached analysis:', e);
+                        }
+                    }
+                    
+                    showError('No profile URL provided. Please go back and enter a valid profile URL.');
+                    return;
+                }
+
+                const apiUrl = `/api/profile-results?profile_url=${encodeURIComponent(profileUrl)}&platform=${encodeURIComponent(platform)}`;
+                console.log('Fetching from:', apiUrl);
+
+                const res = await authManager.authFetch(apiUrl);
+                console.log('Response status:', res.status);
+
+                const data = await res.json();
+                console.log('Received data:', data);
+
+                if (data.success && data.summary) {
+                    // Cache the successful analysis
+                    localStorage.setItem('lastProfileAnalysis', JSON.stringify({
+                        profile_url: profileUrl,
+                        platform: platform,
+                        timestamp: new Date().toISOString()
+                    }));
+                    
+                    displayResults(data);
+                } else {
+                    console.error('Analysis failed:', data.error);
+                    showError(data.error || 'Unknown error occurred. Please try analyzing your profile again.');
+                }
+            } catch (error) {
+                console.error('Error loading results:', error);
+                showError(`Error loading results: ${error.message}. Please check your internet connection and try again.`);
+            }
+        }
+        
+        function showError(message) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="max-w-2xl mx-auto text-center py-16">
+                    <div class="card p-8">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Analysis Error</h2>
+                        <p class="text-gray-600 mb-8">${message}</p>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="window.location.href='/profile-analysis'" class="btn-primary">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Back to Analysis
+                            </button>
+                            <button onclick="location.reload()" class="btn-secondary">
+                                <i class="fas fa-refresh mr-2"></i>
+                                Retry
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayResults(data) {
+            console.log('Displaying results:', data);
+            
+            const getScoreClass = (score) => {
+                if (score >= 80) return 'score-excellent';
+                if (score >= 60) return 'score-good';
+                if (score >= 40) return 'score-average';
+                return 'score-poor';
+            };
+
+            const getScoreIcon = (score) => {
+                if (score >= 80) return 'fas fa-trophy';
+                if (score >= 60) return 'fas fa-thumbs-up';
+                if (score >= 40) return 'fas fa-exclamation-circle';
+                return 'fas fa-times-circle';
+            };
+
+            // Safely get data with fallbacks
+            const summary = data.summary || {};
+            const detailedAnalysis = data.detailed_analysis || {};
+            const professionalScore = summary.professional_score || 0;
+            const visibilityScore = summary.visibility_score || 0;
+            const overallScore = Math.round((professionalScore + visibilityScore) / 2);
+            const overallAssessment = summary.overall_assessment || 'Profile analysis completed successfully.';
+            const strengths = summary.strengths || ['Profile data successfully analyzed'];
+            const improvements = summary.areas_for_improvement || ['Consider updating profile regularly'];
+            const immediateActions = summary.immediate_actions || ['Review profile completeness'];
+            const mediumTermGoals = summary.medium_term_goals || ['Enhance professional network'];
+            const keywords = summary.optimization_keywords || ['professional'];
+            
+            // Get platform specific advice
+            const platformAdvice = detailedAnalysis.platform_advice || {};
+            const headlineSuggestions = platformAdvice.headline_suggestions || ['Optimize your headline for better visibility'];
+            const skillsToAdd = platformAdvice.skills_to_add || ['Add relevant technical skills'];
+            const certifications = platformAdvice.certifications_recommended || ['Consider industry certifications'];
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <!-- Page Header -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
+                        <i class="fas fa-chart-line text-emerald-600 mr-3"></i>
+                        <span class="gradient-text">Analysis Complete</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Comprehensive insights and actionable recommendations for your professional profile
+                    </p>
+                </div>
+
+                <!-- Profile Header Card -->
+                <div class="card p-8 mb-8">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="platform-badge">
+                                    <i class="fab fa-${data.platform === 'github' ? 'github' : 'linkedin'} mr-2"></i>
+                                    ${data.platform || 'Unknown'}
+                                </span>
+                                <span class="text-sm font-medium text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    ${new Date(data.last_analysis_date).toLocaleString()}
+                                </span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Profile Analysis Results</h2>
+                            <p class="text-gray-600 break-all">
+                                <i class="fas fa-link mr-2"></i>
+                                <a href="${data.profile_url}" target="_blank" class="text-emerald-600 hover:text-emerald-700 transition-colors">
+                                    ${data.profile_url}
+                                </a>
+                            </p>
+                        </div>
+                        <div class="text-center lg:text-right">
+                            <div class="text-5xl font-extrabold text-emerald-600 mb-2">${overallScore}%</div>
+                            <div class="text-gray-500 font-medium">Overall Score</div>
+                            <div class="mt-2">
+                                <i class="${getScoreIcon(overallScore)} text-2xl ${overallScore >= 60 ? 'text-emerald-500' : 'text-orange-500'}"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Scores -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-chart-bar text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Performance Metrics</h2>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 scores-grid">
+                        <div class="text-center p-6 bg-gray-50 rounded-xl">
+                            <div class="w-12 h-12 icon-bg-green rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-user-tie text-emerald-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Professional Score</h3>
+                            <div class="score-bar mb-3">
+                                <div class="score-fill ${getScoreClass(professionalScore)}" style="width: ${professionalScore}%;">
+                                    ${professionalScore}%
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                ${professionalScore >= 80 ? '🎉 Excellent professional presence!' : 
+                                  professionalScore >= 60 ? '📈 Good, with room for growth' : 
+                                  '🔧 Needs professional enhancement'}
+                            </p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-gray-50 rounded-xl">
+                            <div class="w-12 h-12 icon-bg-blue rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-eye text-blue-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Visibility Score</h3>
+                            <div class="score-bar mb-3">
+                                <div class="score-fill ${getScoreClass(visibilityScore)}" style="width: ${visibilityScore}%;">
+                                    ${visibilityScore}%
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                ${visibilityScore >= 80 ? '🌟 Highly discoverable profile!' : 
+                                  visibilityScore >= 60 ? '👁️ Good visibility levels' : 
+                                  '📍 Low visibility - follow recommendations'}
+                            </p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-gray-50 rounded-xl md:col-span-2 lg:col-span-1">
+                            <div class="w-12 h-12 icon-bg-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-star text-purple-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Overall Rating</h3>
+                            <div class="score-bar mb-3">
+                                <div class="score-fill ${getScoreClass(overallScore)}" style="width: ${overallScore}%;">
+                                    ${overallScore}%
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                ${overallScore >= 80 ? '🏆 Outstanding profile!' : 
+                                  overallScore >= 60 ? '⭐ Strong profile foundation' : 
+                                  '🚀 Great potential for improvement'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-lightbulb text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Key Insights</h2>
+                    </div>
+                    <div class="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-6">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-quote-left text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-emerald-900 mb-2">AI Assessment</h3>
+                                <p class="text-emerald-800 leading-relaxed">${overallAssessment}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Wins Section -->
+                <div class="card p-8 mb-8 border-l-4 border-orange-400">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-rocket text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Quick Wins</h2>
+                        <span class="ml-3 px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                            High Impact
+                        </span>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 gap-6 suggestions-grid">
+                        <div class="bg-gradient-to-br from-orange-50 to-yellow-50 border border-orange-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-orange rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-heading text-orange-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Headline Optimization</h3>
+                            </div>
+                            <ul class="space-y-2 mb-4">
+                                ${headlineSuggestions.map(suggestion => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-orange-500 mr-2 mt-1 text-sm"></i>
+                                        <span class="text-gray-700">${suggestion}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <p class="text-sm text-orange-800 font-medium">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Impact: 40% increase in profile views
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-red-50 to-pink-50 border border-red-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-red rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-clock text-red-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Immediate Actions</h3>
+                            </div>
+                            <ul class="space-y-2 mb-4">
+                                ${immediateActions.map(action => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-red-500 mr-2 mt-1 text-sm"></i>
+                                        <span class="text-gray-700">${action}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <p class="text-sm text-red-800 font-medium">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    Complete within 24 hours
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strengths & Improvements -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-balance-scale text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Strengths & Growth Areas</h2>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 gap-6 suggestions-grid">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-green rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-check-circle text-green-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Your Strengths</h3>
+                            </div>
+                            <ul class="space-y-3">
+                                ${strengths.map(strength => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-star text-green-500 mr-3 mt-1 text-sm"></i>
+                                        <span class="text-gray-700 font-medium">${strength}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-blue rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-arrow-up text-blue-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Growth Opportunities</h3>
+                            </div>
+                            <ul class="space-y-3">
+                                ${improvements.map(improvement => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-arrow-circle-up text-blue-500 mr-3 mt-1 text-sm"></i>
+                                        <span class="text-gray-700 font-medium">${improvement}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Strategy -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-road text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Long-term Growth Strategy</h2>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 gap-6 suggestions-grid">
+                        <div class="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-purple rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-target text-purple-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Medium-term Goals</h3>
+                            </div>
+                            <ul class="space-y-3 mb-4">
+                                ${mediumTermGoals.map(goal => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-calendar-alt text-purple-500 mr-3 mt-1 text-sm"></i>
+                                        <span class="text-gray-700">${goal}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <p class="text-sm text-purple-800 font-medium">
+                                    <i class="fas fa-calendar mr-1"></i>
+                                    Timeline: 3-6 months
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-xl p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 icon-bg-blue rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-cogs text-indigo-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Recommended Skills</h3>
+                            </div>
+                            <ul class="space-y-3 mb-4">
+                                ${skillsToAdd.map(skill => 
+                                    `<li class="flex items-start">
+                                        <i class="fas fa-plus-circle text-indigo-500 mr-3 mt-1 text-sm"></i>
+                                        <span class="text-gray-700">${skill}</span>
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                            <div class="bg-indigo-100 p-3 rounded-lg">
+                                <p class="text-sm text-indigo-800 font-medium">
+                                    <i class="fas fa-chart-line mr-1"></i>
+                                    Impact: 25% more recruiter interest
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-certificate text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Certification Recommendations</h2>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl p-6">
+                        <div class="flex items-start mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-award text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Boost Your Credentials</h3>
+                                <p class="text-gray-600">Certifications can increase profile views by 60% and demonstrate expertise</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            ${certifications.map(cert => 
+                                `<div class="flex items-center p-3 bg-white rounded-lg border border-yellow-200">
+                                    <i class="fas fa-medal text-yellow-600 mr-3"></i>
+                                    <span class="text-gray-700 font-medium">${cert}</span>
+                                </div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimization Keywords -->
+                <div class="card p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-tags text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">SEO Keywords</h2>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-xl p-6">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Optimization Keywords</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                <i class="fas fa-lightbulb text-teal-600 mr-2"></i>
+                                Include these keywords in your headline and summary to improve searchability
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            ${keywords.map(keyword => 
+                                `<span class="tag">
+                                    <i class="fas fa-hashtag mr-1"></i>${keyword}
+                                </span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Plan -->
+                <div class="card p-8 bg-gradient-to-br from-emerald-600 to-green-700 text-white">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-rocket text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-4">Your Action Plan</h2>
+                        <p class="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">
+                            Start with <strong>Quick Wins</strong>, then work on your <strong>Growth Strategy</strong>. 
+                            Track your progress and update your profile regularly for best results!
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button onclick="window.location.href='/profile-analysis'" class="btn-secondary bg-white/20 border-white/40 text-white hover:bg-white hover:text-emerald-600">
+                                <i class="fas fa-search mr-2"></i>
+                                Analyze Another Profile
+                            </button>
+                            <button onclick="window.location.href='/my-resumes'" class="btn-primary bg-white text-emerald-600 hover:bg-emerald-50">
+                                <i class="fas fa-file-pdf mr-2"></i>
+                                Create ATS Resume
+                            </button>
+                            <button onclick="window.print()" class="btn-secondary bg-white/20 border-white/40 text-white hover:bg-white hover:text-emerald-600">
+                                <i class="fas fa-download mr-2"></i>
+                                Save Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Animate score bars
+            setTimeout(() => {
+                document.querySelectorAll('.score-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 500);
+        }
+
+        // Start loading results when page loads
+        loadResults();
+    </script>
+</body>
+</html>

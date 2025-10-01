@@ -1,0 +1,257 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Nithin Jambula} \\ \vspace{1pt}
+    None \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91-9347632259 ~ \href{mailto:nithinjambula89@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{nithinjambula89@gmail.com}} ~ 
+    \href{linkedin.com/in/nithin-jambula}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/nithin-jambula}}  ~
+    \href{github.com/nithin434}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/nithin434}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute of Technology, Andhra Pradesh}{2023 -- 2027}
+      {B.Tech., CSE}{Amaravathi, Andhra Pradesh}
+    \resumeSubheading
+      {Narayana Junior College}{2021 -- 2023}
+      {Senior Secondary}{None}
+    \resumeSubheading
+      {Vivekananda}{2021}
+      {Secondary}{None}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small Neural Networks
+            \item\small Deep Learning Algorithms
+            \item\small Computer Vision
+            \item\small Natural Language Processing
+            \item\small Machine Learning
+            \item\small Reinforcement Learning
+            \item\small Data Structures
+            \item\small Algorithms
+            \item\small Operating Systems
+            \item\small Database Management Systems
+            \item\small API Design and Development
+            \item\small Software Engineering Principles
+            \item\small Robotics
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Air VitAP}{Jun 2024 -- Present}
+      {Researcher}{Amaravathi, India}
+      \resumeItemListStart
+        \resumeItem{Designed and deployed an automated voice calling system using ViciDial and Asterisk to promote products across diverse customer segments.}
+        \resumeItem{Conducted applied research on voice automation, outreach optimization, and real-time customer interaction analysis, blending academic insight with practical deployment.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Sripto [ὑ7]}{Dec 2023 -- May 2024}
+      {Machine Learning Engineer}{Amaravathi, India}
+      \resumeItemListStart
+        \resumeItem{Developed a robust Retrieval-Augmented Generation (RAG) system to deliver contextual and real-time answers from private documents.}
+        \resumeItem{Built AI-driven tools like PDF chatbots, product search matchers, and NL-to-SQL query engines to improve user accessibility and automation.}
+        \resumeItem{Oversaw deployment, scaling, and integration of backend ML models and frontend interfaces, ensuring end-to-end production readiness.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Vulcan: Self-Driving EV Platform (VIT-AP Research Initiative)} $|$ \emph{CARLA, PyTorch, DeepLabV3, SAC, DAgger, Path Planning}}{Jan 2023 -- Present}
+          \resumeItemListStart
+            \resumeItem{Designed an end-to-end autonomous driving pipeline using CARLA simulator and Soft Actor-Critic (SAC) reinforcement learning.}
+            \resumeItem{Integrated semantic segmentation with DeepLabV3 for scene understanding; implemented low-computation path planning models.}
+            \resumeItem{Applied DAgger to fine-tune models in dynamic environments, achieving smoother lane alignment and better obstacle avoidance.}
+            \resumeItem{Deployed optimized model for real-time performance on resource-constrained systems with minimal latency.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{EchoSight: Assistive Navigation Glasses for the Visually Impaired} $|$ \emph{YOLOv8, Roboflow, Raspberry Pi, GCP, OpenCV, TTS}}{Dec 2024 -- Present}
+          \resumeItemListStart
+            \resumeItem{Developed wearable vision-based system for real-time object detection and navigation feedback via Bluetooth earbuds.}
+            \resumeItem{Fine-tuned YOLOv8 with a custom dataset (50+ object classes), enabling 45+ FPS detection with positional awareness.}
+            \resumeItem{Integrated spatial direction and distance estimation using monocular vision and depth inference algorithms.}
+            \resumeItem{Included contextual alerting system with dynamic updates and location-aware voice output for enhanced mobility.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{WOAT: An intelligent auto-reply bot} $|$ \emph{Gemini API, Gcloud, Adversarial Testing, Python}}{Jul 2023 -- Nov 2023}
+          \resumeItemListStart
+            \resumeItem{Built WOAT (WhatsApp Auto-Responder), an AI-powered application that learns user communication styles and auto-generates contextual replies using Google Gemini API.}
+            \resumeItem{Engineered smart WhatsApp integration with Python + Node.js, including features like contact-based response filters, session persistence, QR-based login, and fallback simple reply mode.}
+            \resumeItem{Implemented modules for communication tone learning, relationship-based message prioritization.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{DeepShield: Face-Swap Deepfake Detection Model} $|$ \emph{CNN, GAN, OpenCV, Adversarial Testing, Python}}{Jul 2023 -- Nov 2023}
+          \resumeItemListStart
+            \resumeItem{Engineered a CNN-based deepfake detection model, achieving 22\% increase in classification accuracy.}
+            \resumeItem{Created a synthetic video generation tool for data augmentation, expanding dataset variability by 40\%.}
+            \resumeItem{Validated performance using precision-recall and ROC-AUC metrics; reduced false positives by 18\%.}
+            \resumeItem{Conducted adversarial stress tests to evaluate detection robustness under manipulated inputs.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{NeuroSecAPI: API Vulnerability Detection Framework} $|$ \emph{Neurosymbolic AI, NLP, OWASP, Flask, Python}}{Feb 2024 -- Apr 2024}
+          \resumeItemListStart
+            \resumeItem{Built a neurosymbolic reasoning engine for detecting API-level vulnerabilities based on request pattern semantics.}
+            \resumeItem{Increased vulnerability detection accuracy by 34\%, improving security posture for data transmissions over APIs.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{ScreenAutomate: Gesture + Voice Controlled Display System} $|$ \emph{Python, OpenCV, MediaPipe, SpeechRecognition, Bluetooth}}{Oct 2023 -- Jan 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a hybrid control system enabling users to manage screens using voice and hand gestures within Bluetooth range.}
+            \resumeItem{Designed for accessibility and remote desktop interfacing; supports hands-free interaction and smart automation.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{Python, SQL, C++, Java} \\
+     \textbf{Technologies}{TensorFlow, PyTorch, OpenCV, YOLOv8, Hugging Face, LangChain, LLaMA, Scikit-Learn} \\
+     \textbf{Tools}{MLflow, Roboflow, CVAT, ONNX, Weights & Biases,ViciDial, Asterisk,Raspberry Pi,GCP,Flask,MediaPipe,SpeechRecognition,Bluetooth} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+%-----------INVOLVEMENT---------------
+\section{Leadership / Extracurricular}
+    \resumeSubHeadingListStart
+        \resumeSubheading{ACS International Student Chapter, VIT-AP}{Aug 2023 -- Present}{President}{VIT-AP}
+            \resumeItemListStart
+                \resumeItem{None}
+            \resumeItemListEnd
+        \resumeSubheading{SEDS, VIT-AP}{Jan 2023 -- Present}{Marketing Member}{VIT-AP}
+            \resumeItemListStart
+                \resumeItem{None}
+            \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+
+
+\end{document}

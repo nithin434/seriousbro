@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Resume • Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .emerald { color: #059669; }
+        .emerald-bg { background: #059669; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .upload-area {
+            transition: all 0.3s ease;
+            border: 2px dashed #d1d5db;
+        }
+        .upload-area:hover {
+            border-color: #059669;
+            background-color: #f0fdf4;
+        }
+        .upload-area.dragover {
+            border-color: #059669;
+            background-color: #f0fdf4;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg mb-8">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-2xl font-extrabold tracking-tight">
+                    <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                </a>
+                <a href="/my-resumes" class="emerald hover:text-emerald-700">My Resumes</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="max-w-xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h1 class="text-2xl font-bold mb-6 text-gray-800">Upload Your Resume</h1>
+                
+                <form id="uploadForm" class="space-y-6">
+                    <div class="upload-area rounded-lg p-8 text-center" id="uploadArea">
+                        <input type="file" id="resumeFile" name="file" 
+                               accept=".pdf,.doc,.docx" class="hidden" required>
+                        <label for="resumeFile" class="cursor-pointer">
+                            <div class="emerald hover:text-emerald-700">
+                                <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                                <span class="text-gray-600">Drop your resume here or <span class="emerald font-semibold">click to browse</span></span>
+                                <div class="text-sm text-gray-500 mt-2">Supported formats: PDF, DOC, DOCX (Max: 16MB)</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="fileInfo" class="hidden">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded">
+                            <span id="fileName" class="text-gray-600"></span>
+                            <button type="button" id="removeFile" 
+                                    class="text-red-500 hover:text-red-600">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full emerald-bg text-white py-3 px-4 rounded-lg hover:bg-emerald-700 font-semibold transition-colors">
+                        Upload & Analyze Resume
+                    </button>
+                </form>
+
+                <div id="status" class="mt-6 hidden"></div>
+                                <!-- Recent Resumes Section -->
+                                <div id="recentResumes" class="mt-10">
+                                    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center"><svg class="h-5 w-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m0 0V7a4 4 0 00-4-4H7a4 4 0 00-4 4v10a4 4 0 004 4h4"/></svg>Recent Resumes</h2>
+                                    <div id="resumesList"></div>
+                                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('resumeFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const removeFile = document.getElementById('removeFile');
+        const status = document.getElementById('status');
+        const uploadArea = document.getElementById('uploadArea');
+
+                // Fetch and display recent resumes
+                async function loadRecentResumes() {
+                    try {
+                        const resp = await authManager.authFetch('/my-resumes');
+                        const data = await resp.json();
+                        const resumesList = document.getElementById('resumesList');
+                        resumesList.innerHTML = '';
+                        if (data.success && data.resumes && data.resumes.length > 0) {
+                            data.resumes.slice(0,2).forEach(resume => {
+                                const card = document.createElement('div');
+                                card.className = 'flex items-center justify-between bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 rounded-lg p-4 mb-3 shadow-sm';
+                                card.innerHTML = `
+                                    <div>
+                                        <div class="font-semibold text-gray-800">${resume.name}</div>
+                                        <div class="text-xs text-gray-500">Uploaded: ${resume.upload_date}</div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="${resume.dashboard_url}" class="px-3 py-1 rounded bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition">Dashboard</a>
+                                        <a href="${resume.ats_url}" class="px-3 py-1 rounded bg-gray-800 text-white text-xs font-medium hover:bg-black transition">ATS Resume</a>
+                                    </div>
+                                `;
+                                resumesList.appendChild(card);
+                            });
+                        } else {
+                            resumesList.innerHTML = '<div class="text-gray-400 text-sm">No recent resumes found.</div>';
+                        }
+                    } catch (e) {
+                        document.getElementById('resumesList').innerHTML = '<div class="text-red-400 text-sm">Could not load recent resumes.</div>';
+                    }
+                }
+                loadRecentResumes();
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (isValidFile(file)) {
+                    fileInput.files = files;
+                    displayFileInfo(file);
+                } else {
+                    showError('Invalid file type. Please select a PDF, DOC, or DOCX file.');
+                }
+            }
+        });
+
+        function isValidFile(file) {
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            const allowedExtensions = ['.pdf', '.doc', '.docx'];
+            
+            return allowedTypes.includes(file.type) || 
+                   allowedExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+        }
+
+        function displayFileInfo(file) {
+            fileName.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+            fileInfo.classList.remove('hidden');
+        }
+
+        function showError(message) {
+            status.innerHTML = `
+                <div class="bg-red-50 text-red-600 p-4 rounded">
+                    <div class="font-semibold mb-2">Error</div>
+                    <div>${message}</div>
+                </div>
+            `;
+            status.classList.remove('hidden');
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (isValidFile(file)) {
+                    displayFileInfo(file);
+                    status.classList.add('hidden'); // Hide any previous errors
+                } else {
+                    showError('Invalid file type. Please select a PDF, DOC, or DOCX file.');
+                    fileInput.value = '';
+                }
+            }
+        });
+
+        removeFile.addEventListener('click', () => {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            status.classList.add('hidden');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate file before upload
+            const file = fileInput.files[0];
+            if (!file) {
+                showError('Please select a file to upload.');
+                return;
+            }
+
+            if (!isValidFile(file)) {
+                showError('Invalid file type. Please select a PDF, DOC, or DOCX file.');
+                return;
+            }
+
+            if (file.size > 16 * 1024 * 1024) { // 16MB limit
+                showError('File too large. Maximum size is 16MB.');
+                return;
+            }
+
+            status.innerHTML = `
+                <div class="bg-blue-50 text-blue-600 p-4 rounded">
+                    <div class="flex items-center">
+                        <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                        </svg>
+                        Analyzing resume...
+                    </div>
+                </div>
+            `;
+            status.classList.remove('hidden');
+
+            const formData = new FormData(form);
+            
+            try {
+                console.log('Sending file upload request...');
+                const response = await authManager.authFetch('/api/resume/upload', {
+                    method: 'POST',
+                    body: formData
+                    // authFetch will add Authorization header and handle Content-Type correctly for FormData
+                });
+                
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Response result:', result);
+                
+                if (result.success) {
+                    status.innerHTML = `
+                        <div class="bg-green-50 text-green-600 p-4 rounded">
+                            <div class="flex items-center">
+                                <svg class="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                ${result.message || 'Resume processed successfully!'}
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = result.redirect_url;
+                    }, 1500);
+                } else {
+                    status.innerHTML = `
+                        <div class="bg-red-50 text-red-600 p-4 rounded">
+                            <div class="font-semibold mb-2">Upload Failed</div>
+                            <div>Error: ${result.error || 'Unknown error occurred'}</div>
+                            ${result.details ? `<div class="mt-2 text-sm opacity-75">Details: ${result.details}</div>` : ''}
+                            ${result.suggestions ? `
+                                <div class="mt-3">
+                                    <div class="text-sm font-medium mb-1">Suggestions:</div>
+                                    <ul class="text-sm list-disc list-inside space-y-1 opacity-90">
+                                        ${result.suggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                status.innerHTML = `
+                    <div class="bg-red-50 text-red-600 p-4 rounded">
+                        <div class="font-semibold mb-2">Upload Failed</div>
+                        <div>Network error: ${error.message}</div>
+                        <div class="mt-2 text-sm opacity-75">Please check your connection and try again.</div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html> 

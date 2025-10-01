@@ -1,0 +1,34 @@
+[
+  {
+    "question": "How do I upload a resume?",
+    "answer": "Click on the 'Upload Resume' button and select your PDF, DOC, or DOCX file. The system will automatically parse your resume data."
+  },
+  {
+    "question": "What file formats are supported?",
+    "answer": "We support PDF, DOC, and DOCX file formats up to 16MB in size."
+  },
+  {
+    "question": "How does the ATS optimization work?",
+    "answer": "Our AI analyzes your resume against ATS requirements, checking format compatibility, keyword optimization, and structure to improve your chances of passing automated screening."
+  },
+  {
+    "question": "Can I generate multiple cover letters?",
+    "answer": "Yes! You can generate customized cover letters for different job applications using your uploaded resume data."
+  },
+  {
+    "question": "Is my data secure?",
+    "answer": "Yes, all data is encrypted in transit and at rest. We never sell your personal information and you can request data deletion at any time."
+  },
+  {
+    "question": "How do I delete my account?",
+    "answer": "Go to Settings > Danger Zone and click 'Delete Account'. This action is irreversible and will remove all your data."
+  },
+  {
+    "question": "Can I download my generated resumes?",
+    "answer": "Yes, you can download both the original uploaded file and any generated ATS-optimized versions in PDF format."
+  },
+  {
+    "question": "What is the interview preparation feature?",
+    "answer": "Our AI generates customized interview questions based on your resume and provides practice sessions to help you prepare for job interviews."
+  }
+]

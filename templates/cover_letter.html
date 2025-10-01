@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cover Letter Generator • Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .emerald { color: #059669; }
+        .emerald-bg { background: #059669; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .card { background: #fff; border-radius: 1.25rem; box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.08); transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12); }
+        .header-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; text-decoration: none; }
+        .header-btn.improve { background: #f0fdf4; color: #059669; border: 1px solid #059669; }
+        .header-btn.improve:hover { background: #059669; color: #fff; }
+        
+        /* Cool loading animations */
+        .loading-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #059669;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        .particle:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+        .particle:nth-child(3) { left: 60%; animation-delay: 1s; }
+        .particle:nth-child(4) { left: 80%; animation-delay: 1.5s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 1; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.7; }
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #059669;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #059669; }
+        }
+        
+        .success-animation {
+            animation: successPop 0.5s ease-out;
+        }
+        @keyframes successPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .update-badge {
+            animation: updatePulse 2s ease-in-out;
+        }
+        @keyframes updatePulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .action-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .action-btn:hover::before {
+            left: 100%;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center">
+                    <span class="text-2xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/cover-letter-history/{{resume_id}}" class="header-btn improve flex items-center">
+                    <i class="fas fa-history mr-2"></i>View History
+                </a>
+                <a href="/dashboard/{{resume_id}}" class="header-btn improve flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Cover Letter Generator</h1>
+            <p class="text-gray-600 mt-2">Create personalized cover letters that stand out</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Form -->
+            <div class="card p-8">
+                <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                    <div class="text-2xl font-bold">Generate Cover Letter</div>
+                    <div class="text-sm text-gray-200">AI-powered personalized cover letters</div>
+                </div>
+                
+                <form id="coverLetterForm" class="space-y-6">
+                    <input type="hidden" id="resumeId" value="{{resume_id}}">
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">Company Name</label>
+                        <input type="text" id="companyName" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required
+                               placeholder="e.g. Tech Corporation">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">Job Title</label>
+                        <input type="text" id="jobTitle" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required
+                               placeholder="e.g. Senior Software Engineer">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">Job Description</label>
+                        <textarea id="jobDescription" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 h-32" required
+                                placeholder="Paste the job description here..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">Additional Context (Optional)</label>
+                        <textarea id="additionalContext" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 h-24"
+                                placeholder="Any specific points you want to highlight..."></textarea>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-magic mr-2"></i>Generate Cover Letter
+                    </button>
+                </form>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="card p-8 hidden">
+                <div class="text-center loading-container">
+                    <div class="loading-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="mb-6">
+                            <i class="fas fa-pen-fancy text-6xl text-emerald-600 animate-bounce"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2 typing-animation">Crafting your personalized cover letter...</h3>
+                        <p class="text-gray-600">Our AI is analyzing your resume and the job requirements to create the perfect cover letter</p>
+                        <div class="mt-6 flex justify-center">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce"></div>
+                                <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Cover Letter - Centered below -->
+        <div id="coverLetterResult" class="mt-8 hidden">
+            <div class="card p-8 max-w-4xl mx-auto">
+                <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                    <div class="text-2xl font-bold flex items-center justify-between">
+                        <span>Generated Cover Letter</span>
+                        <span id="updateBadge" class="text-xs bg-emerald-500 px-2 py-1 rounded-full update-badge hidden">Updated</span>
+                    </div>
+                    <div id="subjectLine" class="text-sm text-gray-200 hidden">
+                        <span class="font-medium">Suggested Subject:</span> <span id="subjectText"></span>
+                    </div>
+                    <div class="text-sm text-gray-200">Your personalized cover letter is ready</div>
+                </div>
+                
+                <div id="letterContent" class="whitespace-pre-wrap prose max-w-none border border-gray-200 p-6 bg-gray-50 rounded-lg mb-6 min-h-[400px]"></div>
+                
+                <div class="flex gap-4 mb-6">
+                    <button onclick="copyLetter()" 
+                            class="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-copy mr-2"></i>Copy to Clipboard
+                    </button>
+                    <button onclick="copySubject()" 
+                            class="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-envelope mr-2"></i>Copy Subject
+                    </button>
+                    <button onclick="sendEmail()" 
+                            class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-paper-plane mr-2"></i>Send Email
+                    </button>
+                    <button onclick="regenerateLetter()" 
+                            class="flex-1 bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-redo mr-2"></i>Regenerate
+                    </button>
+                </div>
+                
+                <!-- Regenerate Section -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="font-semibold mb-3 text-gray-900">Want to improve it?</h3>
+                    <textarea id="feedbackInput" 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 h-24 mb-4"
+                            placeholder="Provide feedback for improvements (e.g., make it more formal, highlight specific achievements, etc.)"></textarea>
+                    <button onclick="regenerateWithFeedback()"
+                            class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                        <i class="fas fa-wand-magic-sparkles mr-2"></i>Regenerate with Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('coverLetterForm');
+        const resultDiv = document.getElementById('coverLetterResult');
+        const loadingDiv = document.getElementById('loadingState');
+        const letterContent = document.getElementById('letterContent');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+
+            // Show loading state
+            resultDiv.classList.add('hidden');
+            loadingDiv.classList.remove('hidden');
+            loadingDiv.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const response = await authFetch('/cover-letter/{{ resume_id }}', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        company_name: document.getElementById('companyName').value,
+                        job_title: document.getElementById('jobTitle').value,
+                        job_description: document.getElementById('jobDescription').value,
+                        additional_context: document.getElementById('additionalContext').value
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    letterContent.textContent = result.cover_letter;
+                    
+                    // Handle subject line if provided
+                    if (result.subject_line) {
+                        document.getElementById('subjectText').textContent = result.subject_line;
+                        document.getElementById('subjectLine').classList.remove('hidden');
+                    }
+                    
+                    loadingDiv.classList.add('hidden');
+                    resultDiv.classList.remove('hidden');
+                    resultDiv.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate cover letter');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-magic mr-2"></i>Generate Cover Letter';
+                loadingDiv.classList.add('hidden');
+            }
+        });
+
+        function copyLetter() {
+            const letterText = document.getElementById('letterContent').textContent;
+            navigator.clipboard.writeText(letterText)
+                .then(() => {
+                    const button = event.target;
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                    button.classList.add('bg-green-600', 'success-animation');
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('bg-green-600', 'success-animation');
+                    }, 2000);
+                })
+                .catch(err => console.error('Failed to copy:', err));
+        }
+
+        function copySubject() {
+            const subjectText = document.getElementById('subjectText').textContent;
+            if (subjectText) {
+                navigator.clipboard.writeText(subjectText)
+                    .then(() => {
+                        const button = event.target;
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                        button.classList.add('bg-green-600', 'success-animation');
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.classList.remove('bg-green-600', 'success-animation');
+                        }, 2000);
+                    })
+                    .catch(err => console.error('Failed to copy subject:', err));
+            } else {
+                alert('No subject line available to copy');
+            }
+        }
+
+        function sendEmail() {
+            const letterText = document.getElementById('letterContent').textContent;
+            const subjectText = document.getElementById('subjectText').textContent || 
+                               `Cover Letter - ${document.getElementById('jobTitle').value} at ${document.getElementById('companyName').value}`;
+            
+            // Get recipient email - you might want to add this as an input field
+            const recipientEmail = prompt('Please enter recipient email address:');
+            if (!recipientEmail) {
+                alert('Recipient email is required to send the cover letter');
+                return;
+            }
+
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+
+            authManager.authFetch('/send-cover-letter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    recipient_email: recipientEmail,
+                    subject: subjectText,
+                    body: letterText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '<i class="fas fa-check mr-2"></i>Sent!';
+                    button.classList.add('bg-green-600', 'success-animation');
+                    alert('Cover letter sent successfully!');
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('bg-green-600', 'success-animation');
+                        button.disabled = false;
+                    }, 3000);
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to send cover letter'));
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to send cover letter. Please try again.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
+
+        function regenerateLetter() {
+            document.getElementById('coverLetterForm').dispatchEvent(new Event('submit'));
+        }
+
+        async function regenerateWithFeedback() {
+            const feedback = document.getElementById('feedbackInput').value;
+            if (!feedback.trim()) {
+                alert('Please provide feedback for improvements');
+                return;
+            }
+
+            const submitButton = document.querySelector('button[onclick="regenerateWithFeedback()"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Regenerating...';
+
+            try {
+                const response = await authFetch('/api/regenerate-cover-letter', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        resume_id: '{{ resume_id }}',
+                        feedback: feedback,
+                        company_name: document.getElementById('companyName').value,
+                        job_title: document.getElementById('jobTitle').value,
+                        job_description: document.getElementById('jobDescription').value,
+                        additional_context: document.getElementById('additionalContext').value
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    letterContent.textContent = result.cover_letter;
+                    
+                    // Handle subject line if provided
+                    if (result.subject_line) {
+                        document.getElementById('subjectText').textContent = result.subject_line;
+                        document.getElementById('subjectLine').classList.remove('hidden');
+                    }
+                    
+                    document.getElementById('feedbackInput').value = '';
+                    
+                    // Show update badge
+                    const updateBadge = document.getElementById('updateBadge');
+                    updateBadge.classList.remove('hidden');
+                    setTimeout(() => {
+                        updateBadge.classList.add('hidden');
+                    }, 3000);
+                    
+                    submitButton.innerHTML = '<i class="fas fa-check mr-2"></i>Success!';
+                    submitButton.classList.add('bg-green-600', 'success-animation');
+                    setTimeout(() => {
+                        submitButton.innerHTML = originalText;
+                        submitButton.classList.remove('bg-green-600', 'success-animation');
+                    }, 2000);
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to regenerate cover letter');
+            } finally {
+                submitButton.disabled = false;
+                if (!submitButton.classList.contains('bg-green-600')) {
+                    submitButton.innerHTML = originalText;
+                }
+            }
+        }
+
+        // Authentication check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authManager.isAuthenticated()) {
+                authManager.redirectToLogin();
+            }
+        });
+    </script>
+</body>
+</html>

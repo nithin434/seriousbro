@@ -1,0 +1,202 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Ayus Pathak} \\ \vspace{1pt}
+    Vellore Institute of Technology - AP \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ 9550323601 ~ \href{mailto:Mail}{\raisebox{-0.2\height}\faEnvelope\  \underline{Mail}} ~ 
+    \href{None}{\raisebox{-0.2\height}\faLinkedin\ \underline{None}}  ~
+    \href{None}{\raisebox{-0.2\height}\faGithub\ \underline{None}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute Of Technology - AP}{None}
+      {Bachelor’s Of Technology}{None}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small HTML
+            \item\small CSS
+            \item\small JavaScript
+            \item\small Java
+            \item\small Python
+            \item\small Flutter
+            \item\small Front-End Development
+            \item\small User-Centered Design
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Vectr}{Oct 2023 -- Present}
+      {Product Development Intern}{None}
+      \resumeItemListStart
+        \resumeItem{Streamlined Vectr’s application by optimizing front-end functionality.}
+        \resumeItem{Contributed to brainstorming key features to enhance user experience.}
+        \resumeItem{Supported overall app development to improve performance.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Entrepreneurship Club Initiatives} $|$ \emph{None}}{Dec 2023 -- Present}
+          \resumeItemListStart
+            \resumeItem{Led the organization of 'World Entrepreneur's Day,' attracting over 100 participants.}
+            \resumeItem{Oversaw the 'Women in Entrepreneurship' event, bringing together more than 40 teams.}
+            \resumeItem{Focused on fostering engagement and growth within the entrepreneurial community.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Machine Learning Club Documentation} $|$ \emph{None}}{Dec 2023 -- Present}
+          \resumeItemListStart
+            \resumeItem{Served as a member of the Documentation Team for the Machine Learning Club.}
+            \resumeItem{Organized and maintained records of club activities, projects, and technical processes.}
+            \resumeItem{Ensured clear communication and detailed documentation for smooth project execution.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{HTML, CSS, JavaScript, Java, Python, Flutter} \\
+     \textbf{Soft Skills}{Solution Oriented, Team collaboration, User-Centered Design, Data-driven Planning} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+%-----------INVOLVEMENT---------------
+\section{Leadership / Extracurricular}
+    \resumeSubHeadingListStart
+        \resumeSubheading{Entrepreneurship Club}{Aug 2024 -- Present}{President}{None}
+            \resumeItemListStart
+                \resumeItem{Instrumental in creating a collaborative platform for entrepreneurship.}
+                \resumeItem{Led the organization of 'World Entrepreneur's Day,' attracting over 100 participants.}
+                \resumeItem{Oversaw the 'Women in Entrepreneurship' event, which brought together more than 40 teams.}
+            \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+
+
+\end{document}

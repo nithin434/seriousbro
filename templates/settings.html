@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings • Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        /* Brand colors */
+        .brand-syn { color: #10b981; }
+        .brand-texa { color: #111827; }
+        
+        /* Card styles */
+        .card { 
+            background: white; 
+            border-radius: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: all 0.3s ease;
+        }
+        .card:hover { 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-1px);
+        }
+        
+        /* Section header styles */
+        .section-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            border-radius: 1rem 1rem 0 0;
+            margin: -2rem -2rem 1.5rem -2rem;
+            padding: 1.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            pointer-events: none;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Toggle switch styles */
+        .toggle-switch {
+            position: relative;
+            width: 3rem;
+            height: 1.5rem;
+            background: #d1d5db;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active {
+            background: #10b981;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .toggle-switch.active::after {
+            transform: translateX(1.5rem);
+        }
+        
+        /* Input styles */
+        .form-input {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        /* Stat card styles */
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: #e5e7eb;
+        }
+        
+        /* Danger zone styles */
+        .danger-zone {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #fecaca;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        
+        /* Header styles */
+        .header-btn { 
+            padding: 0.5rem 1rem; 
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            text-decoration: none;
+            border: 2px solid transparent;
+        }
+        .header-btn.primary { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .header-btn.primary:hover { 
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .header-btn.danger { 
+            background: #fef2f2; 
+            color: #dc2626; 
+            border-color: #fecaca;
+        }
+        .header-btn.danger:hover { 
+            background: #dc2626; 
+            color: white;
+            border-color: #dc2626;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-200/60 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center group">
+                    <span class="text-2xl font-extrabold tracking-tight transition-transform group-hover:scale-105">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="header-btn primary flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+                <button onclick="handleLogout()" class="header-btn danger flex items-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Settings</h1>
+            <p class="text-gray-600 mt-2 text-lg">Manage your account preferences and security</p>
+        </div>
+
+        <div class="grid gap-8">
+            <!-- Profile Information -->
+            <div class="card p-8">
+                <div class="section-header">
+                    <div class="relative z-10">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold">Profile Information</h2>
+                                <p class="text-white/80 text-sm">Your personal details and contact information</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Full Name</label>
+                        <div class="form-input bg-gray-50 border-gray-200 text-gray-700 cursor-not-allowed">
+                            {{ resume_data.parsed_data.personal_info.name if resume_data and resume_data.parsed_data and resume_data.parsed_data.personal_info else 'User' }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Email Address</label>
+                        <div class="form-input bg-gray-50 border-gray-200 text-gray-700 cursor-not-allowed">
+                            {{ resume_data.parsed_data.personal_info.email if resume_data and resume_data.parsed_data and resume_data.parsed_data.personal_info else 'user@syntexa.ai' }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Phone Number</label>
+                        <div class="form-input bg-gray-50 border-gray-200 text-gray-700 cursor-not-allowed">
+                            {{ resume_data.parsed_data.personal_info.phone if resume_data and resume_data.parsed_data and resume_data.parsed_data.personal_info else 'Not provided' }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Location</label>
+                        <div class="form-input bg-gray-50 border-gray-200 text-gray-700 cursor-not-allowed">
+                            {{ resume_data.parsed_data.personal_info.location if resume_data and resume_data.parsed_data and resume_data.parsed_data.personal_info else 'Not provided' }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex items-center gap-4">
+                    <button class="btn-primary inline-flex items-center">
+                        <i class="fas fa-edit mr-2"></i>Edit Profile
+                    </button>
+                    <p class="text-sm text-gray-500">Profile editing coming soon</p>
+                </div>
+            </div>
+
+            <!-- Preferences -->
+            <div class="card p-8">
+                <div class="section-header">
+                    <div class="relative z-10">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-cog text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold">Preferences</h2>
+                                <p class="text-white/80 text-sm">Customize your SYNTEXA experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Email Notifications</h3>
+                                <p class="text-sm text-gray-600">Receive updates about your resumes and new features</p>
+                            </div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-moon text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Dark Mode</h3>
+                                <p class="text-sm text-gray-600">Switch to dark theme</p>
+                            </div>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-chart-bar text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Analytics</h3>
+                                <p class="text-sm text-gray-600">Help us improve by sharing anonymous usage data</p>
+                            </div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div class="card p-8">
+                <div class="section-header">
+                    <div class="relative z-10">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-shield-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold">Security & Privacy</h2>
+                                <p class="text-white/80 text-sm">Manage your account security and data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-lock text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Data Encryption</h3>
+                        <p class="text-sm text-gray-600">Your data is encrypted and secure with AES-256</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-shield text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Privacy Protection</h3>
+                        <p class="text-sm text-gray-600">We never sell or share your personal information</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-key text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Access Control</h3>
+                        <p class="text-sm text-gray-600">Secure JWT-based authentication system</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="showChangePasswordModal()" class="btn-primary inline-flex items-center">
+                        <i class="fas fa-lock mr-2"></i>Change Password
+                    </button>
+                    <button onclick="exportUserData()" class="btn-secondary inline-flex items-center">
+                        <i class="fas fa-download mr-2"></i>Export Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card p-8">
+                <div class="section-header bg-gradient-to-r from-red-600 to-red-700">
+                    <div class="relative z-10">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-exclamation-triangle text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold">Danger Zone</h2>
+                                <p class="text-red-100 text-sm">Irreversible and destructive actions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="danger-zone">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-trash text-red-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-lg font-semibold text-red-900 mb-2">Delete Account</h3>
+                            <p class="text-red-700 mb-4">Once you delete your account, there is no going back. This will permanently delete your profile, resumes, and all associated data.</p>
+                            <button onclick="showDeleteAccountModal()" class="btn-danger inline-flex items-center">
+                                <i class="fas fa-trash mr-2"></i>Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Change Password</h3>
+                <p class="text-gray-600 mt-1">Update your account security</p>
+            </div>
+            <form id="changePasswordForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Current Password</label>
+                        <input type="password" id="currentPassword" class="form-input" placeholder="Enter current password" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
+                        <input type="password" id="newPassword" class="form-input" placeholder="Enter new password" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm new password" required>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-8">
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-check mr-2"></i>Change Password
+                    </button>
+                    <button type="button" onclick="closeChangePasswordModal()" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="deleteAccountModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-red-600">Delete Account</h3>
+                <p class="text-gray-600 mt-1">This action cannot be undone</p>
+            </div>
+            <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6">
+                <p class="text-red-700 text-sm">This will permanently delete your account and all associated data. Your profile, resumes, and settings will be permanently removed after 30 days.</p>
+            </div>
+            <form id="deleteAccountForm">
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Enter your password to confirm</label>
+                    <input type="password" id="deletePassword" class="form-input border-red-300 focus:border-red-500" placeholder="Enter your password" required>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="btn-danger flex-1">
+                        <i class="fas fa-trash mr-2"></i>Delete Account
+                    </button>
+                    <button type="button" onclick="closeDeleteAccountModal()" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authManager.isAuthenticated()) {
+                authManager.redirectToLogin();
+            }
+        });
+
+        // Toggle switch functionality
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+
+        // Logout functionality
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                authManager.logout();
+            }
+        }
+
+        // Export user data
+        async function exportUserData() {
+            try {
+                const loadingBtn = event.target;
+                const originalText = loadingBtn.innerHTML;
+                loadingBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Exporting...';
+                loadingBtn.disabled = true;
+
+                const response = await authManager.authFetch('/api/auth/export-data', {
+                    method: 'GET'
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `syntexa_data_export_${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    // Show success message
+                    showNotification('Data exported successfully!', 'success');
+                } else {
+                    const errorData = await response.json();
+                    showNotification('Export failed: ' + (errorData.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Export error:', error);
+                showNotification('Export failed: ' + error.message, 'error');
+            } finally {
+                const btn = document.querySelector('button[onclick="exportUserData()"]');
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-download mr-2"></i>Export Data';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        // Change Password Modal
+        function showChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.remove('hidden');
+            document.getElementById('changePasswordModal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('hidden');
+            document.getElementById('changePasswordModal').classList.remove('flex');
+            document.getElementById('changePasswordForm').reset();
+            document.body.style.overflow = 'auto';
+        }
+
+        // Change Password Form
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                showNotification('New password must be at least 8 characters long', 'error');
+                return;
+            }
+
+            try {
+                const response = await authManager.authFetch('/api/auth/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('Password changed successfully!', 'success');
+                    closeChangePasswordModal();
+                } else {
+                    showNotification('Password change failed: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Password change error:', error);
+                showNotification('Password change failed: ' + error.message, 'error');
+            }
+        });
+
+        // Delete Account Modal
+        function showDeleteAccountModal() {
+            document.getElementById('deleteAccountModal').classList.remove('hidden');
+            document.getElementById('deleteAccountModal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteAccountModal() {
+            document.getElementById('deleteAccountModal').classList.add('hidden');
+            document.getElementById('deleteAccountModal').classList.remove('flex');
+            document.getElementById('deleteAccountForm').reset();
+            document.body.style.overflow = 'auto';
+        }
+
+        // Delete Account Form
+        document.getElementById('deleteAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('deletePassword').value;
+            
+            if (!confirm('Are you absolutely sure? This action cannot be undone and will permanently delete all your data.')) {
+                return;
+            }
+
+            try {
+                const response = await authManager.authFetch('/api/auth/delete-account', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('Account deletion initiated. You will be redirected to the login page.', 'success');
+                    setTimeout(() => {
+                        authManager.logout();
+                    }, 2000);
+                } else {
+                    showNotification('Account deletion failed: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Account deletion error:', error);
+                showNotification('Account deletion failed: ' + error.message, 'error');
+            }
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('changePasswordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeChangePasswordModal();
+            }
+        });
+
+        document.getElementById('deleteAccountModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteAccountModal();
+            }
+        });
+
+        // ESC key to close modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeChangePasswordModal();
+                closeDeleteAccountModal();
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
+            
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            notification.classList.add(bgColor);
+            
+            notification.innerHTML = `
+                <div class="flex items-center text-white">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-3"></i>
+                    <span class="font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

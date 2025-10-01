@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Improve Resume • Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .emerald { color: #059669; }
+        .emerald-bg { background: #059669; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .card { background: #fff; border-radius: 1.25rem; box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.08); transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12); }
+        .header-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; text-decoration: none; }
+        .header-btn.improve { background: #f0fdf4; color: #059669; border: 1px solid #059669; }
+        .header-btn.improve:hover { background: #059669; color: #fff; }
+        
+        /* Cool loading animations */
+        .loading-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #059669;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        .particle:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+        .particle:nth-child(3) { left: 60%; animation-delay: 1s; }
+        .particle:nth-child(4) { left: 80%; animation-delay: 1.5s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 1; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.7; }
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #059669;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #059669; }
+        }
+        
+        .success-animation {
+            animation: successPop 0.5s ease-out;
+        }
+        @keyframes successPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .action-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .action-btn:hover::before {
+            left: 100%;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+        
+        .improvement-card {
+            border-left: 4px solid #059669;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+        }
+        
+        .skill-badge {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center">
+                    <span class="text-2xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/dashboard/{{resume_id}}" class="header-btn improve flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
+                <i class="fas fa-magic text-emerald-600 mr-3"></i>Improve Your Resume
+            </h1>
+            <p class="text-xl text-gray-600">Craft your resume in seconds for your desired job roles</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Current Resume Section -->
+            <div class="space-y-6">
+                <div class="card p-8">
+                    <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                        <div class="text-2xl font-bold">Current Resume</div>
+                        <div class="text-sm text-gray-200">Your existing resume information</div>
+                    </div>
+                    
+                    {% if resume_data and resume_data.parsed_data %}
+                        <!-- Personal Info -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-user text-emerald-600 mr-2"></i>Personal Information
+                            </h3>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="font-medium text-gray-900">{{resume_data.parsed_data.personal_info.name}}</p>
+                                <p class="text-gray-600">{{resume_data.parsed_data.personal_info.email}}</p>
+                                {% if resume_data.parsed_data.personal_info.phone %}
+                                <p class="text-gray-600">{{resume_data.parsed_data.personal_info.phone}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-tools text-emerald-600 mr-2"></i>Skills
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in resume_data.parsed_data.skills %}
+                                <span class="skill-badge px-3 py-1 rounded-full text-sm">
+                                    {{skill}}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-briefcase text-emerald-600 mr-2"></i>Experience
+                            </h3>
+                            <div class="space-y-4">
+                                {% for exp in resume_data.parsed_data.experience %}
+                                <div class="improvement-card p-4 rounded-lg">
+                                    <p class="font-semibold text-gray-900">{{exp.title}}</p>
+                                    <p class="text-emerald-600 font-medium">{{exp.company}}</p>
+                                    <p class="text-sm text-gray-600">{{exp.duration}}</p>
+                                    {% if exp.responsibilities %}
+                                    <div class="mt-2">
+                                        <p class="text-sm font-medium text-gray-700">Key Responsibilities:</p>
+                                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1">
+                                            {% for resp in exp.responsibilities[:3] %}
+                                            <li>{{resp}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-8">
+                            <i class="fas fa-file-alt text-4xl text-gray-400 mb-4"></i>
+                            <p class="text-gray-500">No resume data available</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Improvement Form -->
+            <div class="space-y-6">
+                <div class="card p-8">
+                    <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                        <div class="text-2xl font-bold">Improve Resume</div>
+                        <div class="text-sm text-gray-200">AI-powered resume enhancement</div>
+                    </div>
+                    
+                    <form id="improvementForm" class="space-y-6">
+                        <input type="hidden" id="resumeId" value="{{resume_id}}">
+
+                        <!-- Improvement Type -->
+                        <div>
+                            <label class="block text-gray-700 mb-2 font-medium">Improvement Type</label>
+                            <select id="improvementType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                <option value="ats_optimization">ATS Optimization</option>
+                                <option value="content_enhancement">Content Enhancement</option>
+                                <option value="skill_highlighting">Skill Highlighting</option>
+                                <option value="job_targeting">Job Targeting</option>
+                            </select>
+                        </div>
+
+                        <!-- Job Description -->
+                        <div id="jobDescriptionSection">
+                            <label class="block text-gray-700 mb-2 font-medium">Job Description (Optional)</label>
+                            <textarea id="jobDescription" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 h-32" 
+                                    placeholder="Paste job description here for targeted improvements"></textarea>
+                        </div>
+
+                        <!-- Industry -->
+                        <div>
+                            <label class="block text-gray-700 mb-2 font-medium">Industry</label>
+                            <select id="industry" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="technology">Technology</option>
+                                <option value="finance">Finance</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="education">Education</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Focus Areas -->
+                        <div>
+                            <label class="block text-gray-700 mb-2 font-medium">Focus Areas</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-emerald-600" name="focus_areas" value="skills">
+                                    <span class="ml-3 font-medium">Skills Optimization</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-emerald-600" name="focus_areas" value="experience">
+                                    <span class="ml-3 font-medium">Experience Enhancement</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-emerald-600" name="focus_areas" value="keywords">
+                                    <span class="ml-3 font-medium">Keyword Optimization</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                            <i class="fas fa-magic mr-2"></i>Generate Improvements
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingState" class="card p-8 hidden">
+                    <div class="text-center loading-container">
+                        <div class="loading-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="mb-6">
+                                <i class="fas fa-wand-magic-sparkles text-6xl text-emerald-600 animate-bounce"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2 typing-animation">Crafting your improved resume...</h3>
+                            <p class="text-gray-600">Our AI is analyzing and enhancing your resume for better job opportunities</p>
+                            <div class="mt-6 flex justify-center">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce"></div>
+                                    <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                    <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results" class="card p-8 hidden">
+                    <div class="bg-black text-white rounded-t-2xl px-6 py-4 mb-6">
+                        <div class="text-2xl font-bold flex items-center justify-between">
+                            <span>Improvements Generated</span>
+                            <span id="updateBadge" class="text-xs bg-emerald-500 px-2 py-1 rounded-full hidden">Updated</span>
+                        </div>
+                        <div class="text-sm text-gray-200">Your resume has been enhanced with AI-powered improvements</div>
+                    </div>
+                    
+                    <div id="improvementResults" class="space-y-6">
+                        <!-- Results will be inserted here -->
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="regenerateImprovements()" 
+                                class="flex-1 bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                            <i class="fas fa-redo mr-2"></i>Regenerate
+                        </button>
+                        <a href="/generate-ats-resume/{{ resume_data._id if resume_data and resume_data._id else resume_id }}" 
+                           class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                            <i class="fas fa-file-pdf mr-2"></i>Generate ATS Resume
+                        </a>
+                    </div>
+                    
+                    <!-- Additional Actions -->
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="font-semibold mb-4 text-gray-900">Ready to apply? Create your application materials:</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="/cover-letter/{{ resume_data._id if resume_data and resume_data._id else resume_id }}" 
+                               class="bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                                <i class="fas fa-envelope mr-2"></i>Write Cover Letter
+                            </a>
+                            <a href="/email/{{ resume_data._id if resume_data and resume_data._id else resume_id }}" 
+                               class="bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-200 font-semibold flex items-center justify-center action-btn">
+                                <i class="fas fa-paper-plane mr-2"></i>Send Cold Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const improvementForm = document.getElementById('improvementForm');
+        const improvementType = document.getElementById('improvementType');
+        const jobDescriptionSection = document.getElementById('jobDescriptionSection');
+        const resultsDiv = document.getElementById('results');
+        const improvementResults = document.getElementById('improvementResults');
+        const loadingDiv = document.getElementById('loadingState');
+
+        // Show/hide job description based on improvement type
+        improvementType.addEventListener('change', () => {
+            const requiresJobDescription = ['job_targeting', 'skill_highlighting'].includes(improvementType.value);
+            jobDescriptionSection.style.display = requiresJobDescription ? 'block' : 'none';
+        });
+
+        improvementForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+            
+            // Show loading state
+            resultsDiv.classList.add('hidden');
+            loadingDiv.classList.remove('hidden');
+            loadingDiv.scrollIntoView({ behavior: 'smooth' });
+            
+            try {
+                const focusAreas = Array.from(document.querySelectorAll('input[name="focus_areas"]:checked'))
+                    .map(cb => cb.value);
+
+                const response = await fetch(`/improve-resume/${document.getElementById('resumeId').value}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        improvement_type: improvementType.value,
+                        job_description: document.getElementById('jobDescription').value,
+                        industry: document.getElementById('industry').value,
+                        focus_areas: focusAreas
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Display improvements
+                    let resultsHtml = `
+                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 text-xl mr-3"></i>
+                                <div>
+                                    <h3 class="font-semibold text-green-800">Resume Improvement Complete</h3>
+                                    <p class="text-green-700">Your resume has been analyzed and improved based on the selected criteria.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Display ATS Score if available
+                    if (result.ats_score !== undefined) {
+                        resultsHtml += `
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg text-gray-900 mb-3">ATS Score</h3>
+                                <div class="bg-gray-100 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-full bg-gray-200 rounded-full h-3 mr-3">
+                                            <div class="bg-emerald-600 h-3 rounded-full transition-all duration-1000" 
+                                                 style="width: ${result.ats_score}%"></div>
+                                        </div>
+                                        <span class="text-lg font-bold text-emerald-600">${result.ats_score}%</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Applicant Tracking System compatibility score</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Display Improved Content if available
+                    if (result.improved_content) {
+                        let content = typeof result.improved_content === 'string' 
+                            ? result.improved_content 
+                            : JSON.stringify(result.improved_content, null, 2);
+                            
+                        resultsHtml += `
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg text-gray-900 mb-3">Improved Content</h3>
+                                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                    <pre class="whitespace-pre-wrap text-sm text-gray-700">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Display Changes if available
+                    if (result.changes && Array.isArray(result.changes)) {
+                        resultsHtml += `
+                            <div class="mb-6">
+                                <h3 class="font-semibold text-lg text-gray-900 mb-3">Changes Made</h3>
+                                <div class="space-y-3">
+                                    ${result.changes.map((change, index) => `
+                                        <div class="flex items-start p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                            <span class="bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">${index + 1}</span>
+                                            <p class="text-gray-700">${typeof change === 'string' ? change : JSON.stringify(change)}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    improvementResults.innerHTML = resultsHtml;
+                    loadingDiv.classList.add('hidden');
+                    resultsDiv.classList.remove('hidden');
+                    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Handle specific error messages
+                    let errorMessage = result.error || 'Failed to generate improvements';
+                    if (response.status === 503) {
+                        errorMessage = 'Resume improvement service is temporarily unavailable. Please try again later.';
+                    }
+                    
+                    improvementResults.innerHTML = `
+                        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                <p><strong>Error:</strong> ${errorMessage}</p>
+                            </div>
+                            ${response.status === 503 ? `
+                                <div class="mt-2 text-sm">
+                                    <p>In the meantime, you can:</p>
+                                    <ul class="list-disc list-inside ml-4 mt-1">
+                                        <li>Use our <a href="/resume-suggestions/${document.getElementById('resumeId').value}" class="text-blue-600 hover:underline">Resume Suggestions</a> tool</li>
+                                        <li>Try our <a href="/ats-resume-generator" class="text-blue-600 hover:underline">ATS Resume Generator</a></li>
+                                        <li>Check our <a href="/help" class="text-blue-600 hover:underline">Help Center</a> for manual improvement tips</li>
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    loadingDiv.classList.add('hidden');
+                    resultsDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                improvementResults.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <p><strong>Network Error:</strong> ${error.message}</p>
+                        </div>
+                        <div class="mt-2 text-sm">
+                            <p>Please check your internet connection and try again.</p>
+                        </div>
+                    </div>
+                `;
+                loadingDiv.classList.add('hidden');
+                resultsDiv.classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-magic mr-2"></i>Generate Improvements';
+            }
+        });
+
+        function regenerateImprovements() {
+            improvementForm.dispatchEvent(new Event('submit'));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Update</title>
+    <style>
+        .section-card {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .diff-view {
+            background: #f5f5f5;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .addition { background-color: #e6ffe6; }
+        .deletion { background-color: #ffe6e6; }
+        .suggestions { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Resume Update</h1>
+    <div id="resumeContent">
+        <!-- Sections will be populated here -->
+    </div>
+
+    <script>
+        async function loadResumeData(resumeId) {
+            try {
+                const response = await fetch(`/api/resume/${resumeId}/suggestions`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResume(data);
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function updateSection(resumeId, section, optimizationType) {
+            try {
+                const response = await fetch(`/api/resume/${resumeId}/update-section`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        section: section,
+                        optimization_type: optimizationType
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    displaySectionUpdate(section, result);
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayResume(data) {
+            const container = document.getElementById('resumeContent');
+            container.innerHTML = '';
+
+            Object.entries(data.sections).forEach(([section, content]) => {
+                container.innerHTML += `
+                    <div class="section-card">
+                        <h3>${section.toUpperCase()}</h3>
+                        <div id="${section}_content">
+                            <pre>${content}</pre>
+                        </div>
+                        <div class="suggestions">
+                            <h4>Suggestions:</h4>
+                            <ul>
+                                ${data.suggestions.sections[section].map(s => 
+                                    `<li>${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <button onclick="updateSection('${data.resume_id}', '${section}', 'optimize')">
+                            Optimize Section
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="ats-score">
+                    <h3>ATS Score: ${data.ats_score}%</h3>
+                </div>
+            `;
+        }
+
+        function displaySectionUpdate(section, result) {
+            const contentDiv = document.getElementById(`${section}_content`);
+            contentDiv.innerHTML = `
+                <div class="diff-view">
+                    <h4>Changes:</h4>
+                    <div class="deletion">
+                        <h5>Previous:</h5>
+                        <pre>${result.previous_content}</pre>
+                    </div>
+                    <div class="addition">
+                        <h5>Updated:</h5>
+                        <pre>${result.updated_content}</pre>
+                    </div>
+                </div>
+                <button onclick="acceptChanges('${section}')">Accept Changes</button>
+                <button onclick="revertChanges('${section}')">Revert Changes</button>
+            `;
+        }
+    </script>
+</body>
+</html>

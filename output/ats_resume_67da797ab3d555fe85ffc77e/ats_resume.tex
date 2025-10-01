@@ -1,0 +1,223 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Waseem baig} \\ \vspace{1pt}
+    Guntur \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91 7842847858 ~ \href{mailto:waseembaig9490@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{waseembaig9490@gmail.com}} ~ 
+    \href{https://linkedin.com/in/waseem-baig}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/waseem-baig}}  ~
+    \href{https://github.com/Waseem-Baig}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/Waseem-Baig}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute of Technology}{Oct 2022 -- Present}
+      {Bachelor of Technology in Computer Science and Engineering}{Amaravati, Andhra Pradesh}
+    \resumeSubheading
+      {NRI Sai Junior College}{Jul 2020 -- Jun 2022}
+      {Intermediate Education (Class XI, XII)}{Guntur, Andhra Pradesh}
+    \resumeSubheading
+      {Kanna High School}{Jul 2019 -- Jun 2020}
+      {Secondary Education (Class X)}{Guntur, Andhra Pradesh}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small Data Structures and Algorithms
+            \item\small Operating Systems
+            \item\small Object-Oriented Programming
+            \item\small Database Management Systems
+            \item\small Computer Networks
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Vellore Institute of Technology, Amaravati (VITAP)}{Dec 2024 -- Present}
+      {Official University Website Intern - Development Lead}{Andhra Pradesh, India}
+      \resumeItemListStart
+        \resumeItem{Developed and maintained the official VITAP website, improving page load speed by 30\% and increasing user engagement by 25\%.}
+        \resumeItem{Implemented 15+ responsive UI components using Next.js and Tailwind CSS, reducing bounce rate by 20\%.}
+        \resumeItem{United with cross-functional teams to enhance website functionality and user experience, leading to a 40\% reduction in reported UI bugs.}
+        \resumeItem{Optimized frontend performance through rigorous testing, reducing rendering time by 35\%.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Sripto Company}{Dec 2024 -- Feb 2025}
+      {Web Developer Intern}{None}
+      \resumeItemListStart
+        \resumeItem{Built and optimized a web application that handled 10,000+ monthly users, reducing rendering time by 40\%.}
+        \resumeItem{Incorporated 5+ third-party APIs, improving data retrieval speed by 35\%.}
+        \resumeItem{Cooperated with a team to enhance website functionality and fix bugs, resulting in 20\% fewer reported issues.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{AVY - AI-Powered Safety and Vigilance System} $|$ \emph{Python, Computer Vision, AI/ML, Cloud Computing}}{Jan 2025}
+          \resumeItemListStart
+            \resumeItem{Contributed to the development of an AI-driven safety and vigilance system aimed at preventing human trafficking of women and children.}
+            \resumeItem{Engineered the software architecture, ensuring seamless integration of real-time monitoring and alert mechanisms.}
+            \resumeItem{Worked together on implementing intelligent threat detection algorithms for enhanced security.}
+            \resumeItem{Currently under review by the Ministry of Micro, Small \& Medium Enterprises (MSME) for potential deployment.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Rotaract Hub Careers Portal} $|$ \emph{Next.js, Bootstrap, PostgreSQL, MongoDB}}{Dec 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a global career portal to connect job seekers with companies actively hiring.}
+            \resumeItem{Collaborated with Rotaract to create an accessible and scalable recruitment platform.}
+            \resumeItem{Implemented an intuitive user interface to enhance job search and application processes.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Face Detection Attendance System} $|$ \emph{Python, OpenCV, Firebase}}{Oct 2024}
+          \resumeItemListStart
+            \resumeItem{Engineered an AI-powered attendance system utilizing real-time face detection.}
+            \resumeItem{Blended Firebase for cloud-based data storage and authentication.}
+            \resumeItem{Enhanced system efficiency by optimizing image processing pipelines.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Next.js Interactive Portfolio} $|$ \emph{Next.js, Tailwind CSS, Three.js, Framer Motion}}{July 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a highly interactive portfolio showcasing projects, skills, and experience.}
+            \resumeItem{Merged Three.js for 3D animations, enhancing visual appeal and user engagement.}
+            \resumeItem{Optimized performance with Next.js and leveraged open-source technologies for scalability.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{Java, Python, SQL, HTML, CSS, JavaScript} \\
+     \textbf{Frameworks/Libraries}{React.js, Next.js, Node.js, Tailwind CSS, Express.js, Bootstrap} \\
+     \textbf{Tools & Technologies}{Git, Firebase, REST APIs, OpenCV} \\
+     \textbf{Soft Skills}{Project Management, Teamwork, Leadership, Communication, Adaptability, Creativity, Fast Learning} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+
+
+\end{document}

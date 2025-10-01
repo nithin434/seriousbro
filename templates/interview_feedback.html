@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Feedback - Resume AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-xl font-bold">Resume AI</a>
+                <a href="/dashboard/{{ resume_id }}" class="text-blue-500">Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6">Interview Feedback</h2>
+
+                <!-- Feedback Form -->
+                <form id="feedbackForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Company Name</label>
+                        <input type="text" id="companyName" 
+                               class="w-full p-2 border rounded" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Interview Type</label>
+                        <select id="interviewType" class="w-full p-2 border rounded" required>
+                            <option value="technical">Technical</option>
+                            <option value="behavioral">Behavioral</option>
+                            <option value="system-design">System Design</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Interview Notes</label>
+                        <textarea id="interviewNotes" 
+                                class="w-full p-2 border rounded h-32" required
+                                placeholder="Describe the questions asked and your responses..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Areas of Improvement</label>
+                        <textarea id="improvements" 
+                                class="w-full p-2 border rounded h-32" required
+                                placeholder="Note down areas where you feel you could improve..."></textarea>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600">
+                        Get Analysis
+                    </button>
+                </form>
+
+                <!-- Analysis Results -->
+                <div id="analysisResults" class="hidden mt-8 space-y-6">
+                    <h3 class="text-xl font-bold">Analysis & Recommendations</h3>
+                    
+                    <!-- Strengths -->
+                    <div>
+                        <h4 class="font-semibold mb-2">Strengths</h4>
+                        <div id="strengthsList" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Improvement Areas -->
+                    <div>
+                        <h4 class="font-semibold mb-2">Areas for Improvement</h4>
+                        <div id="improvementsList" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Action Items -->
+                    <div>
+                        <h4 class="font-semibold mb-2">Recommended Action Items</h4>
+                        <div id="actionItems" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Resources -->
+                    <div>
+                        <h4 class="font-semibold mb-2">Recommended Resources</h4>
+                        <div id="resources" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('feedbackForm');
+        const analysisResults = document.getElementById('analysisResults');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analyzing...';
+
+            try {
+                const response = await fetch('/interview-feedback/{{ resume_id }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        company_name: document.getElementById('companyName').value,
+                        interview_type: document.getElementById('interviewType').value,
+                        notes: document.getElementById('interviewNotes').value,
+                        improvements: document.getElementById('improvements').value
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    displayAnalysis(result.analysis);
+                    analysisResults.classList.remove('hidden');
+                    analysisResults.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to analyze feedback');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Get Analysis';
+            }
+        });
+
+        function displayAnalysis(analysis) {
+            // Display strengths
+            document.getElementById('strengthsList').innerHTML = analysis.strengths
+                .map(strength => `
+                    <div class="bg-green-50 p-3 rounded">
+                        <p class="text-green-800">${strength}</p>
+                    </div>
+                `).join('');
+
+            // Display improvements
+            document.getElementById('improvementsList').innerHTML = analysis.improvements
+                .map(improvement => `
+                    <div class="bg-yellow-50 p-3 rounded">
+                        <p class="text-yellow-800">${improvement}</p>
+                    </div>
+                `).join('');
+
+            // Display action items
+            document.getElementById('actionItems').innerHTML = analysis.action_items
+                .map(item => `
+                    <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-blue-800">${item}</p>
+                    </div>
+                `).join('');
+
+            // Display resources
+            document.getElementById('resources').innerHTML = analysis.resources
+                .map(resource => `
+                    <div class="bg-purple-50 p-3 rounded">
+                        <p class="text-purple-800">
+                            <a href="${resource.url}" target="_blank" class="hover:underline">
+                                ${resource.title}
+                            </a>
+                            - ${resource.description}
+                        </p>
+                    </div>
+                `).join('');
+        }
+    </script>
+</body>
+</html> 

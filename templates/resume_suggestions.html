@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Suggestions - {{ resume_data.parsed_data.personal_info.name if resume_data.parsed_data.personal_info.name else 'Resume Analysis' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .progress {
+            height: 25px;
+        }
+        .progress-bar {
+            font-size: 14px;
+            line-height: 25px;
+        }
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            font-weight: 500;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .list-group-item i {
+            margin-right: 8px;
+        }
+        .rotate-90 { 
+            transform: rotate(90deg); 
+        }
+        .transition-transform { 
+            transition: transform 0.2s ease-in-out; 
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Resume AI</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/dashboard/{{ resume_data._id }}">Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Debug Info Section -->
+        <div class="card mb-4" style="border: 1px solid #dee2e6;">
+            <div class="card-header bg-light" style="cursor: pointer;" onclick="toggleDebug()">
+                <div class="d-flex align-items-center">
+                    <i id="debugArrow" class="fas fa-chevron-right me-2 transition-transform"></i>
+                    <small class="text-muted">Debug Info (Suggestions Data)</small>
+                </div>
+            </div>
+            <div id="debugContent" class="card-body" style="display: none;">
+                <pre class="bg-dark text-success p-3 rounded small" style="max-height: 400px; overflow-y: auto;">{{ suggestions | tojson(indent=2) }}</pre>
+            </div>
+        </div>
+
+        <!-- Overall Summary Card -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Resume Analysis Summary
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% if suggestions.success %}
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h2 class="text-primary">{{ suggestions.metrics.overall_score }}/100</h2>
+                                        <p class="text-muted">Overall Score</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h2 class="text-info">{{ suggestions.metrics.total_suggestions }}</h2>
+                                        <p class="text-muted">Total Suggestions</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Overall Assessment</h5>
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar 
+                                            {% if suggestions.metrics.overall_score >= 80 %}bg-success
+                                            {% elif suggestions.metrics.overall_score >= 60 %}bg-warning
+                                            {% else %}bg-danger{% endif %}" 
+                                            style="width: {{ suggestions.metrics.overall_score }}%">
+                                            {{ suggestions.metrics.overall_score }}%
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">{{ suggestions.summary | truncate(200) }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Error analyzing resume: {{ suggestions.error }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if suggestions.success %}
+            <!-- Section Analysis -->
+            <div class="row">
+                {% for section_name, section_data in suggestions.sections.items() %}
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas 
+                                    {% if section_name == 'personal_info' %}fa-user
+                                    {% elif section_name == 'summary' %}fa-file-text
+                                    {% elif section_name == 'experience' %}fa-briefcase
+                                    {% elif section_name == 'education' %}fa-graduation-cap
+                                    {% elif section_name == 'skills' %}fa-cogs
+                                    {% elif section_name == 'projects' %}fa-project-diagram
+                                    {% elif section_name == 'certifications' %}fa-certificate
+                                    {% else %}fa-file{% endif %} me-2"></i>
+                                {{ section_data.section_name }}
+                            </h5>
+                            <span class="badge 
+                                {% if section_data.score >= 80 %}bg-success
+                                {% elif section_data.score >= 60 %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ section_data.score }}/100
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <!-- Progress Bar -->
+                            <div class="progress mb-3">
+                                <div class="progress-bar 
+                                    {% if section_data.score >= 80 %}bg-success
+                                    {% elif section_data.score >= 60 %}bg-warning
+                                    {% else %}bg-danger{% endif %}" 
+                                    style="width: {{ section_data.score }}%">
+                                    {{ section_data.score }}%
+                                </div>
+                            </div>
+
+                            <!-- Comments -->
+                            <div class="mb-3">
+                                <h6><i class="fas fa-comment me-2"></i>Analysis</h6>
+                                <p class="text-muted small">{{ section_data.comments }}</p>
+                            </div>
+
+                            <!-- Suggestions -->
+                            {% if section_data.suggestions %}
+                            <div class="mb-3">
+                                <h6><i class="fas fa-lightbulb me-2 text-warning"></i>Suggestions</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for suggestion in section_data.suggestions %}
+                                    <li class="list-group-item px-0 py-1">
+                                        <i class="fas fa-arrow-right text-primary me-2"></i>
+                                        <small>{{ suggestion }}</small>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            <!-- Keep Elements -->
+                            {% if section_data.keep_elements %}
+                            <div class="mb-3">
+                                <h6><i class="fas fa-check-circle me-2 text-success"></i>Strengths to Keep</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for element in section_data.keep_elements %}
+                                    <li class="list-group-item px-0 py-1">
+                                        <i class="fas fa-check text-success me-2"></i>
+                                        <small>{{ element }}</small>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            <!-- Remove Elements -->
+                            {% if section_data.remove_elements %}
+                            <div class="mb-3">
+                                <h6><i class="fas fa-times-circle me-2 text-danger"></i>Consider Removing</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for element in section_data.remove_elements %}
+                                    <li class="list-group-item px-0 py-1">
+                                        <i class="fas fa-times text-danger me-2"></i>
+                                        <small>{{ element }}</small>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Detailed Summary -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-clipboard-list me-2"></i>Detailed Analysis Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <pre class="bg-light p-3 rounded">{{ suggestions.summary }}</pre>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Section Scores</h6>
+                                    {% for section, score in suggestions.metrics.section_scores.items() %}
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="small">{{ section.replace('_', ' ').title() }}</span>
+                                        <span class="badge 
+                                            {% if score >= 80 %}bg-success
+                                            {% elif score >= 60 %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                            {{ score }}
+                                        </span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <a href="/improve-resume/{{ resume_data._id }}" class="btn btn-primary me-3">
+                    <i class="fas fa-edit me-2"></i>Improve Resume
+                </a>
+                <a href="/dashboard/{{ resume_data._id }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleDebug() {
+            const debugContent = document.getElementById('debugContent');
+            const debugArrow = document.getElementById('debugArrow');
+            
+            if (debugContent.style.display === 'none') {
+                debugContent.style.display = 'block';
+                debugArrow.classList.add('rotate-90');
+            } else {
+                debugContent.style.display = 'none';
+                debugArrow.classList.remove('rotate-90');
+            }
+        }
+    </script>
+</body>
+</html>

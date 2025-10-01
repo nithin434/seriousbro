@@ -1,0 +1,260 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Nithin kumar Reddy} \\ \vspace{1pt}
+    PULIVENDLA, Andhra Pradesh, 516390, India \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91 9347632259 ~ \href{mailto:nithinjambula89@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{nithinjambula89@gmail.com}} ~ 
+    \href{https://www.linkedin.com/in/nithin-086nxnhnW}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/nithin-086nxnhnW}}  ~
+    \href{https://github.com/nithin891233t}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/nithin891233t}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute of Technology Andhra Pradesh}{2023 -- 2027}
+      {Bachelor of Science in Computer Science and Engineering}{Amaravathi, Andhra Pradesh}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small Machine Learning
+            \item\small Deep Learning
+            \item\small Natural Language Processing
+            \item\small Data Analysis
+            \item\small Data Visualization
+            \item\small Data Science
+            \item\small Neural Networks
+            \item\small Project Management
+            \item\small Classification Algorithms
+            \item\small Computer Vision
+            \item\small Web Automation
+            \item\small Regression modals
+            \item\small SQL
+            \item\small Database Management
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Prasunet Company}{Jun 2024 -- Jul 2024}
+      {Data Science Intern}{None}
+      \resumeItemListStart
+        \resumeItem{Developed a Logistic Regression model to accurately classify geographical locations as either hills or valleys based on input features for the Hill Valley Prediction project.}
+        \resumeItem{Predicted terrain as either Hill or Valley based on given data.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {YBI Foundation}{Jul 2024 -- Aug 2024}
+      {Machine Learning Intern}{None}
+      \resumeItemListStart
+        \resumeItem{Developed and deployed four successful machine learning projects.}
+        \resumeItem{Created a house price estimation model to predict house prices based on features like bedrooms, bathrooms, and area.}
+        \resumeItem{Developed a customer segmentation model to group customer data based on their purchases.}
+        \resumeItem{Implemented an SVM classification model for identifying cats and dogs.}
+        \resumeItem{Built a food recognition model with calorie estimation based on food items.}
+        \resumeItem{Achieved 89.8\% accuracy for the food recognition model and 97\% accuracy for the regression model.}
+        \resumeItem{Implemented machine learning models including linear regression, K-means clustering, SVM, food recognition, and calorie estimation using TensorFlow.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {SEDS(Students for the Exploration and Development of Space)}{Oct 2023 -- Present}
+      {Marketing Team Member}{None}
+      \resumeItemListStart
+        \resumeItem{Actively engaged in marketing initiatives for SEDS, promoting technical and non-technical events to enhance student involvement.}
+        \resumeItem{Developed and implemented targeted marketing strategies that significantly increased brand awareness and fostered a vibrant club culture.}
+        \resumeItem{Collaborated with cross-functional teams to drive engagement, resulting in increased participation and attendance at events.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Hanover and Tyke}{Oct 2020 -- Present}
+      {Business Development Manager}{None}
+      \resumeItemListStart
+        \resumeItem{Led operations, achieving growth of 180\% in two years.}
+        \resumeItem{Hired a new application consultant to help improve team capabilities.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Arowwai Industries}{Nov 2018 -- Sept 2020}
+      {Operations Manager}{None}
+      \resumeItemListStart
+        \resumeItem{Led nation-wide operations, achieving growth of 120\% in two years.}
+        \resumeItem{Spearheaded the development and implementation of subscription video-on-demand over-the-top streaming products.}
+        \resumeItem{Improved employee retention by adopting a new internal communications methodology and restructured employee benefits.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Echo-Sight} $|$ \emph{YOLOv8, Computer Vision}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed a wearable device to enhance mobility and safety for visually impaired individuals through real-time object detection and voice feedback.}
+            \resumeItem{Leveraged a YOLOv8 fine-tuned algorithm trained on a custom dataset featuring over 40 classes.}
+            \resumeItem{Integrated advanced computer vision techniques for accurate identification and localization of objects.}
+            \resumeItem{Provided real-time information like object detection, spatial awareness, and voice guidance.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Screen-Automate} $|$ \emph{Python, Speech Recognition, Computer Vision, Web Automation, Natural Language Processing(NLP), pyttsx3, SpeechRecognition, OpenCV, mediapipe, Selenium}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed a hands-free system allowing users to interact with their screen using voice commands, hand gestures, and automated web actions.}
+            \resumeItem{Integrated libraries like pyttsx3, SpeechRecognition, OpenCV, and mediapipe.}
+            \resumeItem{Implemented a hand gesture control system using OpenCV and mediapipe.}
+            \resumeItem{Powered web automation using Selenium for tasks like form filling and clicking elements.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Cold Mail Generator} $|$ \emph{Llama Gemini API, Streamlit, Hugging Face, web scraping, Python, SQL}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed wearable device to enhance mobility and safety for visually impaired individuals through real-time object detection and voice feedback.}
+            \resumeItem{Leveraged a YOLO (You Only Look Once) fine-tuned algorithm trained on a custom dataset featuring over 40 classes.}
+            \resumeItem{Integrated advanced computer vision techniques for accurate identification and localization of objects.}
+            \resumeItem{Provided real-time information like object detection, spatial awareness, and voice guidance.}
+            \resumeItem{Utilized technologies like Llama Gemini API, Streamlit, Hugging Face, web scraping, Python and SQL.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Integrated Decision-Making Framework} $|$ \emph{Llama Gemini API, Streamlit, Hugging Face, web scraping, Python, SQL}}{None}
+          \resumeItemListStart
+            \resumeItem{Engineered an advanced autonomous decision-making system leveraging machine learning algorithms.}
+            \resumeItem{Integrated techniques such as semantic segmentation, object detection, and risk assessment.}
+            \resumeItem{Employed pose estimation and emotion recognition through voice and facial expression analysis.}
+            \resumeItem{Utilized large language models (LLMs) and state-of-the-art data analytics.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{Python, MYSQL, C++} \\
+     \textbf{Frameworks}{Tensor Flow, Pytorch, Flask} \\
+     \textbf{Tools}{Matlab, Streamlit, Hugging Face, Web Scraping} \\
+     \textbf{Databases}{SQL} \\
+     \textbf{Technical Skills}{Data Analytics, Data Science, Machine Learning, Data Management, Visualization, Computer Vision, Data Processing, Data Visualization, Regression Modals, Speech Recognition, Web Automation, Natural Language Processing(NLP), Classification Algorithms, Adaptability & Problem-Solving,Communication,Team Lead, Marketing Strategies, Analytical Skills, Social Media Management, Brand Management, Digital Marketing, Full Stack Development} \\
+     \textbf{Soft Skills}{Team Management, Communication, Leadership} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+
+
+\end{document}

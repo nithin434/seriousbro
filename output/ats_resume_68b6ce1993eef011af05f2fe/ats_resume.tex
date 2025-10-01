@@ -1,0 +1,223 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Golla Naga Sri Nandhan} \\ \vspace{1pt}
+    Vijayawada \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91 7382975888 ~ \href{mailto:srinandhan.24mic7285@vitapstudent.ac.in}{\raisebox{-0.2\height}\faEnvelope\  \underline{srinandhan.24mic7285@vitapstudent.ac.in}} ~ 
+    \href{None}{\raisebox{-0.2\height}\faLinkedin\ \underline{None}}  ~
+    \href{None}{\raisebox{-0.2\height}\faGithub\ \underline{None}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute Of Technology Amaravati AP}{2024 -- 2029}
+      {Integrated B.Tech & M.Tech}{Amaravati, AP}
+    \resumeSubheading
+      {FIITJEE}{2024}
+      {Senior Secondary (XII)}{None}
+    \resumeSubheading
+      {Sir C R Reddy Public School, West Godavari}{2022}
+      {Secondary (X)}{West Godavari}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small Deep Learning
+            \item\small Generative AI
+            \item\small Natural Language Processing (NLP)
+            \item\small Computer Vision
+            \item\small Reinforcement Learning
+            \item\small Robotics
+            \item\small Machine Learning
+            \item\small Data Analytics
+            \item\small Internet of Things (IoT)
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{VISU - Humanoid Robot that Mimics Human Brain} $|$ \emph{Python, PyTorch, Reinforcement Learning (RL), RLHF}}{Oct 2024 -- May 2025}
+          \resumeItemListStart
+            \resumeItem{Developed a humanoid robot capable of understanding and speaking through RLHF.}
+            \resumeItem{Implemented facial recognition for social activities and engagement.}
+            \resumeItem{Utilized RL to enable the robot to recognize patterns and mimic human-like behaviors for daily activities.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Behaviour Biometrics Model for Cyber Robot detection} $|$ \emph{Python, Logistic Regression, Saga Solver, Log Loss Function}}{Oct 2024 -- Nov 2024}
+          \resumeItemListStart
+            \resumeItem{Built a model using keypad strokes and mouse movements to identify different users.}
+            \resumeItem{Employed Logistic Regression with Saga Solver and Log Loss Function for user classification.}
+            \resumeItem{Enabled the model to update its dataset autonomously and detect cyber bots mimicking human behavior in virtual exams and account logins.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Single Shot MultBox Detection System} $|$ \emph{Python, TensorFlow, Keras, Siamese Neural Networks}}{Sep 2024 -- Oct 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a detection model that achieves 98.9\% accuracy with a good F1 score using a single image for training.}
+            \resumeItem{Utilized TensorFlow and Keras to organize image datasets and construct the model architecture.}
+            \resumeItem{Achieved 15 FPS using Siamese Neural Networks, bypassing the need for YOLO at 75 FPS.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Robot Tazzer - Elderly Support Unit} $|$ \emph{Python, Reinforcement Learning, ESP}}{Jun 2018 -- Dec 2020}
+          \resumeItemListStart
+            \resumeItem{Developed a reinforcement learning robot designed to address major health problems and provide care for individuals.}
+            \resumeItem{Enabled data synchronization through ESP and implemented a warning system for major health issues.}
+            \resumeItem{Configured the robot to send virtual reports to the nearest hospitals in case of emergencies.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{RL-Powered Drug Discovery and Virtual Simulator} $|$ \emph{Python, Reinforcement Learning (RL), Bert-base-uncased}}{Jan 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Developed a platform that processes patient blood reports, extracting key health indicators.}
+            \resumeItem{Utilized bert-base-uncased to convert text reports into 768-dimensional embeddings.}
+            \resumeItem{Implemented an RL environment (PatientDrugEnv) to simulate a multi-step treatment process, selecting drugs and adjusting health parameters based on weight and age.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{AgroSphere AI Powered Agronomist with Virtual Twin for Farmers} $|$ \emph{AI}}{Jul 2024 -- Present}
+          \resumeItemListStart
+            \resumeItem{Created an AI-driven, voice-first platform to guide small and medium farmers.}
+            \resumeItem{Integrated crop diagnostics, government scheme navigation, hyperlocal weather protection, and a Virtual Twin into a mobile-friendly system.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Autonomous CME Sentinel: Real-Time AI Forecasting of Halo CMEs Onboard Aditya-L1} $|$ \emph{AI, Generative Forecasting, Reinforcement Learning, Multi-instrument Data Fusion}}{Jul 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Designed an AI-powered onboard system to detect and forecast Halo Coronal Mass Ejections (CMEs) in real-time using data from the SWIS-ASPEX payload on Aditya-L1.}
+            \resumeItem{Implemented generative forecasting, reinforcement learning, and multi-instrument data fusion for early warnings up to 30 minutes in advance.}
+            \resumeItem{Optimized sensor usage and bandwidth with swarm-compatible alerts and autonomous decision-making.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{Python, C++, Rust, Bash} \\
+     \textbf{Machine Learning & AI}{Machine Learning, Deep Learning, Reinforcement Learning, Transformers, Artificial Intelligence} \\
+     \textbf{Frameworks & Tools}{PyTorch, TensorFlow, Docker} \\
+     \textbf{Other Technical Skills}{Data Analytics, Computer Vision, Internet of Things (IoT), Arduino, Raspberry Pi, Robotics} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+
+
+\end{document}

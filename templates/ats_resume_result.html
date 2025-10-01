@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Syntexa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .emerald { color: #059669; }
+        .emerald-bg { background: #059669; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .card { background: #fff; border-radius: 1.25rem; box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.08); transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12); }
+        
+        .header-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; }
+        .header-btn.improve { background: #f0fdf4; color: #059669; border: 1px solid #059669; }
+        .header-btn.improve:hover { background: #059669; color: #fff; }
+        .header-btn.ats { background: #1f2937; color: #fff; border: 1px solid #1f2937; }
+        .header-btn.ats:hover { background: #374151; }
+        
+        .profile-dropdown { position: relative; }
+        .profile-menu-enter { animation: slideDown 0.2s ease-out; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .btn-primary {
+            background: #059669;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .pdf-viewer {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resume-viewer {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 850px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .resume-header {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .resume-section {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .resume-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+        
+        .editable-field {
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .editable-field:hover {
+            border-color: #e5e7eb;
+            background-color: #f9fafb;
+        }
+        
+        .editable-field.editing {
+            border-color: #059669;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+        
+        .edit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .edit-modal {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .btn-primary {
+            background: #059669;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .skill-tag {
+            background: #f0fdf4;
+            color: #059669;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.25rem;
+            display: inline-block;
+        }
+        
+        .experience-item, .education-item, .project-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            background: #f9fafb;
+        }
+        
+        .add-item-btn {
+            border: 2px dashed #d1d5db;
+            color: #6b7280;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-item-btn:hover {
+            border-color: #059669;
+            color: #059669;
+            background: #f0fdf4;
+        }
+        
+        .delete-btn {
+            color: #dc2626;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        
+        .delete-btn:hover {
+            background: #fef2f2;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            z-index: 1100;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: #dc2626;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .resume-header {
+                padding: 1.5rem;
+            }
+            
+            .resume-section {
+                padding: 1rem;
+            }
+            
+            .edit-modal {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Top Navigation -->
+    <header class="bg-white shadow-lg border-b border-gray-100">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-2xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </a>
+                    <!-- <h1 class="text-xl font-bold text-gray-800">
+                        <i class="fas fa-file-alt text-emerald-600 mr-2"></i>ATS Resume
+                    </h1> -->
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleView()" class="btn-primary" id="viewToggleBtn">
+                        <i class="fas fa-edit mr-2"></i>Edit Mode
+                    </button>
+                    
+                    <button onclick="regenerateResume()" class="btn-secondary">
+                        <i class="fas fa-sync mr-2"></i>Regenerate
+                    </button>
+                    
+                    <button onclick="saveChanges()" class="btn-primary" id="saveBtn" style="display: none;">
+                        <i class="fas fa-save mr-2"></i>Save Changes
+                    </button>
+                    
+                    <a href="/dashboard/{{ resume_id }}" class="header-btn improve">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                    
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown">
+                        <div id="profileAvatarBtn" class="w-10 h-10 rounded-full cursor-pointer border-2 border-emerald-200 hover:border-emerald-400 transition-colors overflow-hidden">
+                            {% if ats_data and ats_data.personal_info and ats_data.personal_info.email %}
+                            <img id="headerAvatar" class="w-full h-full object-cover" alt="Profile" 
+                                 src="https://api.dicebear.com/8.x/personas/svg?seed={{ ats_data.personal_info.email }}&backgroundColor=b6e3f4,c0aede,d1d4f9&radius=50" />
+                            {% else %}
+                            <img id="headerAvatar" class="w-full h-full object-cover" alt="Profile" 
+                                 src="https://api.dicebear.com/8.x/personas/svg?seed=default-user&backgroundColor=b6e3f4,c0aede,d1d4f9&radius=50" />
+                            {% endif %}
+                        </div>
+                        <div id="profileMenu" class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 hidden z-50">
+                            <div class="flex items-center gap-3 mb-4">
+                                {% if ats_data and ats_data.personal_info and ats_data.personal_info.email %}
+                                <img id="profileAvatar" class="w-16 h-16 rounded-full border-2 border-emerald-200" alt="Profile Avatar" 
+                                     src="https://api.dicebear.com/8.x/personas/svg?seed={{ ats_data.personal_info.email }}&backgroundColor=b6e3f4,c0aede,d1d4f9&radius=50" />
+                                {% else %}
+                                <img id="profileAvatar" class="w-16 h-16 rounded-full border-2 border-emerald-200" alt="Profile Avatar" 
+                                     src="https://api.dicebear.com/8.x/personas/svg?seed=default-user&backgroundColor=b6e3f4,c0aede,d1d4f9&radius=50" />
+                                {% endif %}
+                                <div class="flex-1 min-w-0">
+                                    <div id="profileName" class="font-bold text-lg text-gray-900 truncate">
+                                        {{ ats_data.personal_info.name if ats_data and ats_data.personal_info and ats_data.personal_info.name else 'User' }}
+                                    </div>
+                                    <div id="profileEmail" class="text-sm text-gray-600 truncate">
+                                        {{ ats_data.personal_info.email if ats_data and ats_data.personal_info and ats_data.personal_info.email else 'user@example.com' }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-100 pt-3 space-y-2">
+                                {% if ats_data and ats_data.personal_info %}
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fas fa-user mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Name</div>
+                                        <div class="font-medium">{{ ats_data.personal_info.name if ats_data.personal_info.name else 'Not provided' }}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fas fa-envelope mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Email</div>
+                                        <div class="font-medium">{{ ats_data.personal_info.email if ats_data.personal_info.email else 'Not provided' }}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fas fa-phone mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Phone</div>
+                                        <div class="font-medium">{{ ats_data.personal_info.phone if ats_data.personal_info.phone else 'Not provided' }}</div>
+                                    </div>
+                                </div>
+                                {% if ats_data.personal_info.linkedin %}
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fab fa-linkedin mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">LinkedIn</div>
+                                        <a href="{{ ats_data.personal_info.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium">
+                                            LinkedIn Profile
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if ats_data.personal_info.github %}
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fab fa-github mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">GitHub</div>
+                                        <a href="{{ ats_data.personal_info.github }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium">
+                                            GitHub Profile
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% else %}
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fas fa-user mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Name</div>
+                                        <div class="font-medium">User</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-700">
+                                    <i class="fas fa-envelope mr-3 text-emerald-600 w-4"></i>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Email</div>
+                                        <div class="font-medium">user@example.com</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="border-t border-gray-100 mt-3 pt-3">
+                                <div class="flex items-center justify-between">
+                                    <a href="/settings" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
+                                        <i class="fas fa-cog mr-2"></i>Account Settings
+                                    </a>
+                                    <a href="/help" class="text-sm text-gray-500 hover:text-gray-700 flex items-center">
+                                        <i class="fas fa-question-circle mr-1"></i>Help
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Status Alerts -->
+        {% if from_database %}
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-400"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        <strong>Existing Resume Found!</strong> Your ATS-optimized resume was retrieved from database.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-400"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">
+                        <strong>Success!</strong> Your ATS-optimized resume has been generated successfully.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Download Section -->
+        {% if pdf_generated and (pdf_path or pdf_file_id) %}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Download Your Resume</h3>
+                    <p class="text-gray-600">Get your ATS-optimized resume in PDF format</p>
+                </div>
+                <a href="/download-ats-resume/{{ resume_id }}" 
+                   class="btn-primary">
+                    <i class="fas fa-download mr-2"></i>Download PDF
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- PDF Viewer (Default View) -->
+        <div id="pdfView" class="card p-8">
+            {% if pdf_generated and (pdf_path or pdf_file_id) %}
+            <div class="mb-4">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Your ATS-Optimized Resume</h2>
+                <p class="text-gray-600">Preview your professional resume below</p>
+            </div>
+            <iframe src="/download-ats-resume/{{ resume_id }}" 
+                    class="pdf-viewer"
+                    type="application/pdf">
+                <p>Your browser does not support PDFs. 
+                   <a href="/download-ats-resume/{{ resume_id }}" class="text-emerald-600 hover:underline">Download the PDF</a> instead.
+                </p>
+            </iframe>
+            {% else %}
+            <div class="text-center py-12">
+                <i class="fas fa-file-pdf text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">PDF Not Available</h3>
+                <p class="text-gray-500 mb-4">The PDF version of your resume is being generated or encountered an error.</p>
+                <button onclick="regenerateResume()" class="btn-primary">
+                    <i class="fas fa-sync mr-2"></i>Regenerate Resume
+                </button>
+            </div>
+            {% endif %}
+            
+            <!-- Debug Data (Hidden by default, shown when needed) -->
+            <div class="mt-8 border-t pt-8" style="display: none;" id="debugSection">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Resume Data (Debug)</h3>
+                <div class="bg-gray-100 p-4 rounded-lg overflow-auto max-h-96">
+                    {% if ats_data %}
+                        <pre id="atsDataJson" class="text-sm">{{ ats_data | tojsonpretty | safe }}</pre>
+                    {% else %}
+                        <div class="text-red-400">
+                            <i class="fas fa-times-circle mr-2"></i>
+                            No ATS data available
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Editor (Hidden by default, shown in edit mode) -->
+        <div id="editView" class="resume-viewer" style="display: none;">
+                <!-- Header Section -->
+                <div class="resume-header">
+                    <h1 class="text-3xl font-bold mb-4 editable-field" data-field="personal_info.name" data-type="text">
+                        {{ ats_data.personal_info.name if ats_data.personal_info and ats_data.personal_info.name else 'Your Name' }}
+                    </h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-sm">
+                        <p class="editable-field" data-field="personal_info.email" data-type="email">
+                            <i class="fas fa-envelope mr-2"></i>{{ ats_data.personal_info.email if ats_data.personal_info and ats_data.personal_info.email else 'email@example.com' }}
+                        </p>
+                        <p class="editable-field" data-field="personal_info.phone" data-type="tel">
+                            <i class="fas fa-phone mr-2"></i>{{ ats_data.personal_info.phone if ats_data.personal_info and ats_data.personal_info.phone else 'Phone Number' }}
+                        </p>
+                        {% if ats_data.personal_info and ats_data.personal_info.address %}
+                        <p class="editable-field" data-field="personal_info.address" data-type="text">
+                            <i class="fas fa-location-dot mr-2"></i>{{ ats_data.personal_info.address }}
+                        </p>
+                        {% endif %}
+                        <p class="editable-field" data-field="personal_info.linkedin" data-type="url">
+                            <i class="fab fa-linkedin mr-2"></i>{{ ats_data.personal_info.linkedin if ats_data.personal_info and ats_data.personal_info.linkedin else 'LinkedIn Profile' }}
+                        </p>
+                        <p class="editable-field" data-field="personal_info.github" data-type="url">
+                            <i class="fab fa-github mr-2"></i>{{ ats_data.personal_info.github if ats_data.personal_info and ats_data.personal_info.github else 'GitHub Profile' }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="resume-section">
+                    <h2 class="section-title">Skills</h2>
+                    <div id="skillsContainer">
+                        {% if ats_data.skills %}
+                            {% for skill_category in ats_data.skills %}
+                                <div class="mb-4">
+                                    <h3 class="font-semibold text-gray-800 mb-2 editable-field" data-field="skills.{{ loop.index0 }}.category" data-type="text">{{ skill_category.category }}</h3>
+                                    <p class="text-gray-700 editable-field" data-field="skills.{{ loop.index0 }}.items" data-type="text">
+                                        {{ skill_category.items }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="flex flex-wrap gap-2" id="skillsList">
+                                <span class="skill-tag">Click to add skills</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="add-item-btn" onclick="addSkill()" style="display: none;" id="addSkillBtn">
+                        <i class="fas fa-plus mr-2"></i>Add Skill
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="resume-section">
+                    <h2 class="section-title">Experience</h2>
+                    <div id="experienceContainer">
+                        {% if ats_data.experience %}
+                            {% for exp in ats_data.experience %}
+                            <div class="experience-item mb-6" data-index="{{ loop.index0 }}">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="experience.{{ loop.index0 }}.position" data-type="text">
+                                        {{ exp.position if exp.position else 'Job Title' }}
+                                    </h3>
+                                    <i class="fas fa-trash delete-btn" onclick="removeExperience(this)" style="display: none;"></i>
+                                </div>
+                                <p class="text-emerald-600 font-medium mb-1 editable-field" data-field="experience.{{ loop.index0 }}.company" data-type="text">
+                                    {{ exp.company if exp.company else 'Company Name' }}
+                                </p>
+                                <p class="text-gray-600 text-sm mb-3 editable-field" data-field="experience.{{ loop.index0 }}.duration" data-type="text">
+                                    {{ exp.duration if exp.duration else 'Duration' }}
+                                </p>
+                                {% if exp.points %}
+                                <ul class="list-disc list-inside space-y-1">
+                                    {% for point in exp.points %}
+                                    <li class="text-gray-700 editable-field" data-field="experience.{{ loop.index0 }}.points.{{ loop.index0 }}" data-type="textarea">{{ point }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="add-item-btn" onclick="addExperience()" style="display: none;" id="addExperienceBtn">
+                        <i class="fas fa-plus mr-2"></i>Add Experience
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="resume-section">
+                    <h2 class="section-title">Education</h2>
+                    <div id="educationContainer">
+                        {% if ats_data.education %}
+                            {% for edu in ats_data.education %}
+                            <div class="education-item mb-4" data-index="{{ loop.index0 }}">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="education.{{ loop.index0 }}.degree" data-type="text">
+                                        {{ edu.degree if edu.degree else 'Degree' }}
+                                    </h3>
+                                    <i class="fas fa-trash delete-btn" onclick="removeEducation(this)" style="display: none;"></i>
+                                </div>
+                                <p class="text-emerald-600 font-medium mb-1 editable-field" data-field="education.{{ loop.index0 }}.institution" data-type="text">
+                                    {{ edu.institution if edu.institution else 'Institution' }}
+                                </p>
+                                <p class="text-gray-600 text-sm editable-field" data-field="education.{{ loop.index0 }}.duration" data-type="text">
+                                    {{ edu.duration if edu.duration else 'Year' }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="add-item-btn" onclick="addEducation()" style="display: none;" id="addEducationBtn">
+                        <i class="fas fa-plus mr-2"></i>Add Education
+                    </div>
+                </div>
+
+                <!-- Projects -->
+                {% if ats_data.projects %}
+                <div class="resume-section">
+                    <h2 class="section-title">Projects</h2>
+                    <div id="projectsContainer">
+                        {% for project in ats_data.projects %}
+                        <div class="project-item mb-4" data-index="{{ loop.index0 }}">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="projects.{{ loop.index0 }}.name" data-type="text">
+                                    {{ project.name if project.name else 'Project Name' }}
+                                </h3>
+                                <i class="fas fa-trash delete-btn" onclick="removeProject(this)" style="display: none;"></i>
+                            </div>
+                            {% if project.technologies %}
+                            <p class="text-gray-600 text-sm mb-2 editable-field" data-field="projects.{{ loop.index0 }}.technologies" data-type="text">
+                                <strong>Technologies:</strong> {{ project.technologies }}
+                            </p>
+                            {% endif %}
+                            {% if project.points %}
+                            <ul class="list-disc list-inside space-y-1">
+                                {% for point in project.points %}
+                                <li class="text-gray-700 editable-field" data-field="projects.{{ loop.index0 }}.points.{{ loop.index0 }}" data-type="textarea">{{ point }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="add-item-btn" onclick="addProject()" style="display: none;" id="addProjectBtn">
+                        <i class="fas fa-plus mr-2"></i>Add Project
+                    </div>
+                </div>
+                {% else %}
+                <div class="resume-section">
+                    <h2 class="section-title">Projects</h2>
+                    <div id="projectsContainer">
+                        <!-- Empty projects container -->
+                    </div>
+                    <div class="add-item-btn" onclick="addProject()" style="display: none;" id="addProjectBtn">
+                        <i class="fas fa-plus mr-2"></i>Add Project
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Modal -->
+<div class="edit-overlay" id="editOverlay">
+    <div class="edit-modal">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Edit Field</h3>
+            <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="editContent">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+        <div class="flex justify-end space-x-3 mt-6">
+            <button onclick="closeEditModal()" class="btn-secondary">Cancel</button>
+            <button onclick="saveFieldEdit()" class="btn-primary">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+    <span id="notificationText"></span>
+</div>
+
+<script>
+    // Global variables
+    let editMode = false;
+    let currentEditField = null;
+    
+    let resumeData = {};
+    try {
+        resumeData = {{ ats_data | tojson | safe }};
+    } catch (e) {
+        console.error('Error parsing resume data:', e);
+        resumeData = {};
+    }
+    const resumeId = "{{ resume_id }}";
+    
+    console.log('Resume data loaded:', resumeData);
+
+    // Toggle between PDF view and edit view
+    function toggleView() {
+        editMode = !editMode;
+        const viewBtn = document.getElementById('viewToggleBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const pdfView = document.getElementById('pdfView');
+        const editView = document.getElementById('editView');
+        
+        if (editMode) {
+            viewBtn.innerHTML = '<i class="fas fa-file-pdf mr-2"></i>PDF View';
+            viewBtn.classList.remove('btn-primary');
+            viewBtn.classList.add('btn-secondary');
+            saveBtn.style.display = 'inline-block';
+            
+            // Switch views
+            pdfView.style.display = 'none';
+            editView.style.display = 'block';
+            
+            // Show edit controls
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'inline-block');
+            document.querySelectorAll('.add-item-btn').forEach(btn => btn.style.display = 'block');
+            
+            // Add edit indicators
+            document.querySelectorAll('.editable-field').forEach(field => {
+                field.addEventListener('click', openEditModal);
+                field.style.cursor = 'pointer';
+            });
+            
+            showNotification('Edit mode enabled. Click any field to edit.', 'info');
+        } else {
+            viewBtn.innerHTML = '<i class="fas fa-edit mr-2"></i>Edit Mode';
+            viewBtn.classList.remove('btn-secondary');
+            viewBtn.classList.add('btn-primary');
+            saveBtn.style.display = 'none';
+            
+            // Switch views
+            pdfView.style.display = 'block';
+            editView.style.display = 'none';
+            
+            // Hide edit controls
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'none');
+            document.querySelectorAll('.add-item-btn').forEach(btn => btn.style.display = 'none');
+            
+            // Remove edit indicators
+            document.querySelectorAll('.editable-field').forEach(field => {
+                field.removeEventListener('click', openEditModal);
+                field.style.cursor = 'default';
+            });
+            
+            showNotification('PDF view enabled.', 'info');
+        }
+    }
+
+        // Open edit modal
+        function openEditModal(event) {
+            if (!editMode) return;
+            
+            event.stopPropagation();
+            currentEditField = event.target;
+            
+            const field = currentEditField.dataset.field;
+            const type = currentEditField.dataset.type || 'text';
+            const currentValue = getFieldValue(field);
+            
+            const editContent = document.getElementById('editContent');
+            
+            if (type === 'textarea') {
+                editContent.innerHTML = `
+                    <label class="block text-sm font-medium text-gray-700 mb-2">${field}</label>
+                    <textarea id="editInput" class="w-full p-3 border border-gray-300 rounded-lg resize-vertical" rows="4">${currentValue}</textarea>
+                `;
+            } else {
+                editContent.innerHTML = `
+                    <label class="block text-sm font-medium text-gray-700 mb-2">${field}</label>
+                    <input type="${type}" id="editInput" class="w-full p-3 border border-gray-300 rounded-lg" value="${currentValue}">
+                `;
+            }
+            
+            document.getElementById('editOverlay').style.display = 'flex';
+            document.getElementById('editInput').focus();
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editOverlay').style.display = 'none';
+            currentEditField = null;
+        }
+
+        // Save field edit
+        function saveFieldEdit() {
+            const newValue = document.getElementById('editInput').value;
+            const field = currentEditField.dataset.field;
+            
+            setFieldValue(field, newValue);
+            updateFieldDisplay(currentEditField, newValue);
+            closeEditModal();
+            
+            showNotification('Field updated successfully!', 'success');
+        }
+
+        // Get field value from resume data
+        function getFieldValue(fieldPath) {
+            const parts = fieldPath.split('.');
+            let value = resumeData;
+            
+            console.log('Getting field value for:', fieldPath, 'from resumeData:', resumeData);
+            
+            for (let part of parts) {
+                if (value && typeof value === 'object' && part in value) {
+                    value = value[part];
+                } else {
+                    console.log('Field not found:', fieldPath);
+                    return '';
+                }
+            }
+            
+            const result = Array.isArray(value) ? value.join('\n') : (value || '');
+            console.log('Field value result:', result);
+            return result;
+        }
+
+        // Set field value in resume data
+        function setFieldValue(fieldPath, value) {
+            const parts = fieldPath.split('.');
+            let obj = resumeData;
+            
+            console.log('Setting field:', fieldPath, 'to value:', value);
+            
+            // Ensure resumeData has proper structure
+            if (!resumeData.personal_info) resumeData.personal_info = {};
+            if (!resumeData.skills) resumeData.skills = [];
+            if (!resumeData.experience) resumeData.experience = [];
+            if (!resumeData.education) resumeData.education = [];
+            if (!resumeData.projects) resumeData.projects = [];
+            
+            // Navigate to the correct nested object
+            for (let i = 0; i < parts.length - 1; i++) {
+                const part = parts[i];
+                const nextPart = parts[i + 1];
+                
+                if (!obj[part]) {
+                    // Create new object or array based on next part
+                    if (isNaN(nextPart)) {
+                        obj[part] = {};
+                    } else {
+                        obj[part] = [];
+                    }
+                }
+                obj = obj[part];
+            }
+            
+            const lastPart = parts[parts.length - 1];
+            obj[lastPart] = value;
+            
+            console.log('Updated resumeData:', resumeData);
+        }
+
+        // Update field display
+        function updateFieldDisplay(element, value) {
+            if (element.dataset.type === 'textarea') {
+                element.innerHTML = value.replace(/\n/g, '<br>');
+            } else {
+                element.textContent = value;
+            }
+        }
+
+        // Add skill
+        function addSkill() {
+            const skillCategory = prompt('Enter skill category (e.g., Programming Languages, Tools, etc.):');
+            const skillItems = prompt('Enter skills separated by commas:');
+            
+            if (skillCategory && skillCategory.trim() && skillItems && skillItems.trim()) {
+                if (!resumeData.skills) resumeData.skills = [];
+                
+                const newSkill = {
+                    category: skillCategory.trim(),
+                    items: skillItems.trim()
+                };
+                
+                resumeData.skills.push(newSkill);
+                
+                const skillsContainer = document.getElementById('skillsContainer');
+                const addBtn = document.getElementById('addSkillBtn');
+                const index = resumeData.skills.length - 1;
+                
+                const skillElement = document.createElement('div');
+                skillElement.className = 'mb-4';
+                skillElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold text-gray-800 mb-2 editable-field" data-field="skills.${index}.category" data-type="text">
+                            ${skillCategory.trim()}
+                        </h3>
+                        <i class="fas fa-trash delete-btn" onclick="removeSkillCategory(this)" style="display: ${editMode ? 'inline-block' : 'none'};"></i>
+                    </div>
+                    <p class="text-gray-700 editable-field" data-field="skills.${index}.items" data-type="text">
+                        ${skillItems.trim()}
+                    </p>
+                `;
+                
+                skillsContainer.insertBefore(skillElement, addBtn);
+                
+                // Add click listeners to new editable fields
+                if (editMode) {
+                    skillElement.querySelectorAll('.editable-field').forEach(field => {
+                        field.addEventListener('click', openEditModal);
+                    });
+                }
+                
+                showNotification('Skill category added successfully!', 'success');
+            }
+        }
+
+        // Remove skill category
+        function removeSkillCategory(element) {
+            const skillElement = element.closest('.mb-4');
+            const categoryField = skillElement.querySelector('[data-field*="category"]');
+            const fieldPath = categoryField.dataset.field;
+            const index = parseInt(fieldPath.split('.')[1]);
+            
+            if (resumeData.skills && index < resumeData.skills.length) {
+                resumeData.skills.splice(index, 1);
+            }
+            
+            skillElement.remove();
+            
+            // Update indices for remaining skills
+            document.querySelectorAll('#skillsContainer .mb-4').forEach((item, newIndex) => {
+                const fields = item.querySelectorAll('.editable-field');
+                fields.forEach(field => {
+                    const oldField = field.dataset.field;
+                    field.dataset.field = oldField.replace(/skills\.\d+/, `skills.${newIndex}`);
+                });
+            });
+            
+            showNotification('Skill category removed successfully!', 'success');
+        }
+
+        // Add experience
+        function addExperience() {
+            if (!resumeData.experience) resumeData.experience = [];
+            
+            const newExp = {
+                position: 'New Job Title',
+                company: 'Company Name',
+                duration: 'Duration',
+                points: ['Job description and key achievements']
+            };
+            
+            resumeData.experience.push(newExp);
+            
+            const container = document.getElementById('experienceContainer');
+            const addBtn = document.getElementById('addExperienceBtn');
+            const index = resumeData.experience.length - 1;
+            
+            const expElement = document.createElement('div');
+            expElement.className = 'experience-item mb-6';
+            expElement.dataset.index = index;
+            expElement.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="experience.${index}.position" data-type="text">
+                        New Job Title
+                    </h3>
+                    <i class="fas fa-trash delete-btn" onclick="removeExperience(this)" style="display: ${editMode ? 'inline-block' : 'none'};"></i>
+                </div>
+                <p class="text-emerald-600 font-medium mb-1 editable-field" data-field="experience.${index}.company" data-type="text">
+                    Company Name
+                </p>
+                <p class="text-gray-600 text-sm mb-3 editable-field" data-field="experience.${index}.duration" data-type="text">
+                    Duration
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li class="text-gray-700 editable-field" data-field="experience.${index}.points.0" data-type="textarea">Job description and key achievements</li>
+                </ul>
+            `;
+            
+            container.insertBefore(expElement, addBtn);
+            
+            // Add click listeners to new editable fields
+            if (editMode) {
+                expElement.querySelectorAll('.editable-field').forEach(field => {
+                    field.addEventListener('click', openEditModal);
+                });
+            }
+            
+            showNotification('Experience added successfully!', 'success');
+        }
+
+        // Remove experience
+        function removeExperience(element) {
+            const expElement = element.closest('.experience-item');
+            const index = parseInt(expElement.dataset.index);
+            
+            if (resumeData.experience && index < resumeData.experience.length) {
+                resumeData.experience.splice(index, 1);
+            }
+            
+            expElement.remove();
+            
+            // Update indices
+            document.querySelectorAll('.experience-item').forEach((item, newIndex) => {
+                item.dataset.index = newIndex;
+            });
+            
+            showNotification('Experience removed successfully!', 'success');
+        }
+
+        // Add education
+        function addEducation() {
+            if (!resumeData.education) resumeData.education = [];
+            
+            const newEdu = {
+                degree: 'New Degree',
+                institution: 'Institution',
+                duration: 'Year'
+            };
+            
+            resumeData.education.push(newEdu);
+            
+            const container = document.getElementById('educationContainer');
+            const addBtn = document.getElementById('addEducationBtn');
+            const index = resumeData.education.length - 1;
+            
+            const eduElement = document.createElement('div');
+            eduElement.className = 'education-item mb-4';
+            eduElement.dataset.index = index;
+            eduElement.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="education.${index}.degree" data-type="text">
+                        New Degree
+                    </h3>
+                    <i class="fas fa-trash delete-btn" onclick="removeEducation(this)" style="display: ${editMode ? 'inline-block' : 'none'};"></i>
+                </div>
+                <p class="text-emerald-600 font-medium mb-1 editable-field" data-field="education.${index}.institution" data-type="text">
+                    Institution
+                </p>
+                <p class="text-gray-600 text-sm editable-field" data-field="education.${index}.duration" data-type="text">
+                    Year
+                </p>
+            `;
+            
+            container.insertBefore(eduElement, addBtn);
+            
+            // Add click listeners to new editable fields
+            if (editMode) {
+                eduElement.querySelectorAll('.editable-field').forEach(field => {
+                    field.addEventListener('click', openEditModal);
+                });
+            }
+            
+            showNotification('Education added successfully!', 'success');
+        }
+
+        // Remove education
+        function removeEducation(element) {
+            const eduElement = element.closest('.education-item');
+            const index = parseInt(eduElement.dataset.index);
+            
+            if (resumeData.education && index < resumeData.education.length) {
+                resumeData.education.splice(index, 1);
+            }
+            
+            eduElement.remove();
+            
+            // Update indices
+            document.querySelectorAll('.education-item').forEach((item, newIndex) => {
+                item.dataset.index = newIndex;
+            });
+            
+            showNotification('Education removed successfully!', 'success');
+        }
+
+        // Add project
+        function addProject() {
+            if (!resumeData.projects) resumeData.projects = [];
+            
+            const newProject = {
+                name: 'New Project',
+                technologies: 'Technologies used',
+                points: ['Project description and key features']
+            };
+            
+            resumeData.projects.push(newProject);
+            
+            const container = document.getElementById('projectsContainer');
+            const addBtn = document.getElementById('addProjectBtn');
+            const index = resumeData.projects.length - 1;
+            
+            const projectElement = document.createElement('div');
+            projectElement.className = 'project-item mb-4';
+            projectElement.dataset.index = index;
+            projectElement.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800 editable-field" data-field="projects.${index}.name" data-type="text">
+                        New Project
+                    </h3>
+                    <i class="fas fa-trash delete-btn" onclick="removeProject(this)" style="display: ${editMode ? 'inline-block' : 'none'};"></i>
+                </div>
+                <p class="text-gray-600 text-sm mb-2 editable-field" data-field="projects.${index}.technologies" data-type="text">
+                    <strong>Technologies:</strong> Technologies used
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li class="text-gray-700 editable-field" data-field="projects.${index}.points.0" data-type="textarea">Project description and key features</li>
+                </ul>
+            `;
+            
+            container.insertBefore(projectElement, addBtn);
+            
+            // Add click listeners to new editable fields
+            if (editMode) {
+                projectElement.querySelectorAll('.editable-field').forEach(field => {
+                    field.addEventListener('click', openEditModal);
+                });
+            }
+            
+            showNotification('Project added successfully!', 'success');
+        }
+
+        // Remove project
+        function removeProject(element) {
+            const projectElement = element.closest('.project-item');
+            const index = parseInt(projectElement.dataset.index);
+            
+            if (resumeData.projects && index < resumeData.projects.length) {
+                resumeData.projects.splice(index, 1);
+            }
+            
+            projectElement.remove();
+            
+            // Update indices
+            document.querySelectorAll('.project-item').forEach((item, newIndex) => {
+                item.dataset.index = newIndex;
+            });
+            
+            showNotification('Project removed successfully!', 'success');
+        }
+
+        // Save all changes
+        async function saveChanges() {
+            try {
+                showNotification('Saving changes...', 'info');
+                
+                console.log('Saving resume data:', resumeData);
+                
+                const response = await fetch(`/api/update-ats-resume/${resumeId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ats_data: resumeData
+                    })
+                });
+                
+                const result = await response.json();
+                console.log('Save response:', result);
+                
+                if (result.success) {
+                    showNotification('Changes saved successfully!', 'success');
+                    
+                    // Reload the page to show updated data after a brief delay
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showNotification('Error saving changes: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                showNotification('Error saving changes: ' + error.message, 'error');
+            }
+        }
+
+        // Regenerate resume
+        function regenerateResume() {
+            if (confirm('Regenerate resume? This will create a new version based on your current data.')) {
+                const regenerateBtn = document.querySelector('button[onclick="regenerateResume()"]');
+                const originalText = regenerateBtn.innerHTML;
+                regenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Regenerating...';
+                regenerateBtn.disabled = true;
+                
+                showNotification('Regenerating resume...', 'info');
+                
+                fetch(`/api/regenerate-ats-resume/${resumeId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Resume regenerated successfully!', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showNotification('Failed to regenerate resume: ' + data.error, 'error');
+                        regenerateBtn.innerHTML = originalText;
+                        regenerateBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error: ' + error.message, 'error');
+                    regenerateBtn.innerHTML = originalText;
+                    regenerateBtn.disabled = false;
+                });
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            
+            notification.className = 'notification';
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('editOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('ATS Resume Editor initialized');
+            
+            // Ensure data structure exists
+            if (!resumeData || typeof resumeData !== 'object') {
+                resumeData = {};
+            }
+            
+            // Ensure all required sections exist
+            if (!resumeData.personal_info) resumeData.personal_info = {};
+            if (!resumeData.skills) resumeData.skills = [];
+            if (!resumeData.experience) resumeData.experience = [];
+            if (!resumeData.education) resumeData.education = [];
+            if (!resumeData.projects) resumeData.projects = [];
+            
+            console.log('Initialized resumeData structure:', resumeData);
+        });
+
+        // Profile menu functionality
+        function initProfileMenu() {
+            const btn = document.getElementById('profileAvatarBtn');
+            const menu = document.getElementById('profileMenu');
+            if (!btn || !menu) return;
+            
+            btn.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('profile-menu-enter');
+                } else {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('profile-menu-enter');
+                }
+            });
+            
+            document.addEventListener('click', (e) => { 
+                if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('profile-menu-enter');
+                }
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('profile-menu-enter');
+                }
+            });
+        }
+
+        // Initialize profile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            initProfileMenu();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Preparation - Resume AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .rotate-90 { transform: rotate(90deg); }
+        .transition-transform { transition: transform 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-xl font-bold">Resume AI</a>
+                <a href="/dashboard/{{ resume_id }}" class="text-blue-500">Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Input Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6">Interview Preparation Guide</h2>
+                
+                <form id="prepForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Company Name</label>
+                        <input type="text" id="companyName" 
+                               class="w-full p-2 border rounded" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Job Description</label>
+                        <textarea id="jobDescription" 
+                                class="w-full p-2 border rounded h-32" required></textarea>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600">
+                        Generate Interview Guide
+                    </button>
+                </form>
+            </div>
+
+            <div id="loadingIndicator" class="hidden">
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+                    <div class="bg-white p-6 rounded-lg shadow-xl">
+                        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto"></div>
+                        <p class="mt-4 text-gray-700">Generating Interview Guide...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+            </div>
+
+            <!-- Debug Info Section -->
+            <div id="debugSection" class="hidden bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+                <div class="flex items-center cursor-pointer" onclick="toggleDebug()">
+                    <svg id="debugArrow" class="w-4 h-4 mr-2 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <h3 class="text-sm font-medium text-gray-700">Debug Info (Raw JSON Response)</h3>
+                </div>
+                <div id="debugContent" class="hidden mt-3">
+                    <pre id="debugJson" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-auto max-h-96 whitespace-pre-wrap"></pre>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="guideContent" class="hidden space-y-8">
+                <!-- Technical Preparation -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Technical Interview Preparation</h3>
+                    <div id="technicalPrep" class="space-y-4"></div>
+                </div>
+
+                <!-- Behavioral Questions -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Behavioral Interview Questions</h3>
+                    <div id="behavioralPrep" class="space-y-4"></div>
+                </div>
+
+                <!-- Company-Specific Questions -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Company-Specific Questions</h3>
+                    <div id="companyQuestions" class="space-y-4"></div>
+                </div>
+
+                <!-- Preparation Tips -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Interview Preparation Tips</h3>
+                    <div id="prepTips" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const resumeId = '{{ resume_id }}';
+        const form = document.getElementById('prepForm');
+        const guideContent = document.getElementById('guideContent');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const debugSection = document.getElementById('debugSection');
+        const debugJson = document.getElementById('debugJson');
+
+        let rawResponseData = null; // Store raw response for debug
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            guideContent.classList.add('hidden');
+            debugSection.classList.add('hidden');
+
+            try {
+                const response = await fetch(`/interview-prep/${resumeId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        company_name: document.getElementById('companyName').value,
+                        job_description: document.getElementById('jobDescription').value
+                    })
+                });
+
+                const result = await response.json();
+                rawResponseData = result; // Store for debug
+                
+                console.log('Full response:', result); // Debug log
+                
+                // Show debug section
+                debugSection.classList.remove('hidden');
+                debugJson.textContent = JSON.stringify(result, null, 2);
+                
+                if (result.success && result.interview_guide) {
+                    displayGuide(result.interview_guide);
+                } else {
+                    throw new Error(result.error || 'Failed to generate interview guide');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+                
+                // Show debug section even on error
+                if (rawResponseData) {
+                    debugSection.classList.remove('hidden');
+                    debugJson.textContent = JSON.stringify(rawResponseData, null, 2);
+                }
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+
+        function toggleDebug() {
+            const debugContent = document.getElementById('debugContent');
+            const debugArrow = document.getElementById('debugArrow');
+            
+            if (debugContent.classList.contains('hidden')) {
+                debugContent.classList.remove('hidden');
+                debugArrow.classList.add('rotate-90');
+            } else {
+                debugContent.classList.add('hidden');
+                debugArrow.classList.remove('rotate-90');
+            }
+        }
+
+        function displayGuide(guide) {
+            console.log('Guide received:', guide);
+            
+            // Display Technical Preparation
+            displayTechnicalPrep(guide.technical_preparation || {});
+            
+            // Display Behavioral Questions
+            displayBehavioralQuestions(guide.behavioral_questions || {});
+            
+            // Display Company Questions
+            displayCompanyQuestions(guide.company_questions || {});
+            
+            // Display Preparation Tips
+            displayPreparationTips(guide.preparation_tips || {});
+
+            guideContent.classList.remove('hidden');
+            guideContent.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayTechnicalPrep(techPrep) {
+            const element = document.getElementById('technicalPrep');
+            let html = '';
+
+            // Core Concepts
+            if (techPrep.core_concepts && techPrep.core_concepts.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-blue-600 mb-3">Core Technical Concepts</h4>`;
+                
+                techPrep.core_concepts.forEach(concept => {
+                    html += `<div class="bg-gray-50 p-4 rounded-lg mb-3">
+                        <p class="font-medium text-gray-800 mb-2">${concept.question || 'Technical Question'}</p>
+                        <div class="text-sm text-gray-600">
+                            <p><strong>Expected Points:</strong> ${Array.isArray(concept.expected_points) ? concept.expected_points.join(', ') : 'Key technical knowledge'}</p>
+                            <p><strong>Follow-up:</strong> ${Array.isArray(concept.follow_up) ? concept.follow_up.join(', ') : 'Additional questions'}</p>
+                            <p><strong>Difficulty:</strong> <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded">${concept.difficulty || 'Medium'}</span></p>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+            }
+
+            // Problem Solving
+            if (techPrep.problem_solving && techPrep.problem_solving.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-green-600 mb-3">Problem Solving Approach</h4>`;
+                
+                techPrep.problem_solving.forEach(problem => {
+                    html += `<div class="bg-gray-50 p-4 rounded-lg mb-3">
+                        <p class="font-medium text-gray-800 mb-2">${problem.question || 'Problem Solving Question'}</p>
+                        <div class="text-sm text-gray-600">
+                            <p><strong>Expected Points:</strong> ${Array.isArray(problem.expected_points) ? problem.expected_points.join(', ') : 'Systematic approach'}</p>
+                            <p><strong>Follow-up:</strong> ${Array.isArray(problem.follow_up) ? problem.follow_up.join(', ') : 'Implementation details'}</p>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+            }
+
+            // Recommended Topics
+            if (techPrep.recommended_topics && techPrep.recommended_topics.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-purple-600 mb-3">Recommended Study Topics</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${techPrep.recommended_topics.map(topic => `<li>${topic}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // Practice Resources
+            if (techPrep.practice_resources && techPrep.practice_resources.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-orange-600 mb-3">Practice Resources</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${techPrep.practice_resources.map(resource => `<li>${resource}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            if (!html) {
+                html = '<p class="text-gray-500">No technical preparation guidance available.</p>';
+            }
+
+            element.innerHTML = html;
+        }
+
+        function displayBehavioralQuestions(behavioral) {
+            const element = document.getElementById('behavioralPrep');
+            let html = '';
+
+            // Common Questions
+            if (behavioral.common_questions && behavioral.common_questions.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-blue-600 mb-3">Common Behavioral Questions</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        ${behavioral.common_questions.map(question => `<li>${question}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // STAR Method
+            if (behavioral.star_method_examples && behavioral.star_method_examples.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-green-600 mb-3">STAR Method Framework</h4>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <ul class="space-y-2 text-gray-700">
+                            ${behavioral.star_method_examples.map(example => `<li><strong>${example.split(':')[0]}:</strong> ${example.split(':')[1] || example}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>`;
+            }
+
+            // Leadership Questions
+            if (behavioral.leadership_questions && behavioral.leadership_questions.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-purple-600 mb-3">Leadership Questions</h4>`;
+                behavioral.leadership_questions.forEach(q => {
+                    html += `<div class="bg-gray-50 p-3 rounded mb-2">
+                        <p class="font-medium">${q.question || q}</p>
+                        ${q.star_guide ? `<p class="text-sm text-gray-600 mt-1"><em>${q.star_guide}</em></p>` : ''}
+                    </div>`;
+                });
+                html += '</div>';
+            }
+
+            if (!html) {
+                html = '<p class="text-gray-500">No behavioral question guidance available.</p>';
+            }
+
+            element.innerHTML = html;
+        }
+
+        function displayCompanyQuestions(company) {
+            const element = document.getElementById('companyQuestions');
+            let html = '';
+
+            // About Role
+            if (company.about_role && company.about_role.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-blue-600 mb-3">Questions About the Role</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${company.about_role.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // About Company
+            if (company.about_company && company.about_company.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-green-600 mb-3">Questions About the Company</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${company.about_company.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // About Team
+            if (company.about_team && company.about_team.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-purple-600 mb-3">Questions About the Team</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${company.about_team.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            if (!html) {
+                html = '<p class="text-gray-500">No company-specific questions available.</p>';
+            }
+
+            element.innerHTML = html;
+        }
+
+        function displayPreparationTips(tips) {
+            const element = document.getElementById('prepTips');
+            let html = '';
+
+            // Timeline
+            if (tips.timeline) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-blue-600 mb-3">Preparation Timeline</h4>
+                    <p class="text-gray-700 bg-blue-50 p-3 rounded">${tips.timeline}</p>
+                </div>`;
+            }
+
+            // Daily Preparation
+            if (tips.daily_preparation && tips.daily_preparation.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-green-600 mb-3">Daily Preparation Tasks</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${tips.daily_preparation.map(task => `<li>${task}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // Week Before
+            if (tips.week_before && tips.week_before.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-orange-600 mb-3">Week Before Interview</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${tips.week_before.map(task => `<li>${task}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // Day of Interview
+            if (tips.day_of_interview && tips.day_of_interview.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-red-600 mb-3">Day of Interview</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${tips.day_of_interview.map(task => `<li>${task}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // General Tips
+            if (tips.general_tips && tips.general_tips.length > 0) {
+                html += `<div class="mb-6">
+                    <h4 class="font-semibold text-lg text-purple-600 mb-3">General Tips</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${tips.general_tips.map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            if (!html) {
+                html = '<p class="text-gray-500">No preparation tips available.</p>';
+            }
+
+            element.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

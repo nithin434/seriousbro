@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Comparison - Resume AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .comparison-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+        
+        .profile-input-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px dashed #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-input-card:hover {
+            border-color: #3498db;
+        }
+        
+        .profile-input-card.filled {
+            border-color: #2ecc71;
+            border-style: solid;
+        }
+        
+        .profile-comparison-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            margin: 5px;
+        }
+        
+        .score-excellent { background: #2ecc71; }
+        .score-good { background: #3498db; }
+        .score-fair { background: #f39c12; }
+        .score-poor { background: #e74c3c; }
+        
+        .comparison-chart {
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .vs-indicator {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2rem;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .winner-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #f1c40f;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .interest-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 15px;
+            margin: 3px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .interest-tag:hover, .interest-tag.selected {
+            background: #1976d2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.1);">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-user-graduate"></i> Resume AI</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                <a class="nav-link" href="/profile-analysis"><i class="fas fa-chart-line"></i> Profile Analysis</a>
+                <a class="nav-link active" href="/profile-comparison"><i class="fas fa-balance-scale"></i> Compare Profiles</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="comparison-container">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1><i class="fas fa-balance-scale"></i> Profile Comparison</h1>
+                <p class="lead">Compare multiple professional profiles to identify best practices and improvement opportunities</p>
+            </div>
+
+            <!-- Input Section -->
+            <div id="inputSection">
+                <h3><i class="fas fa-plus"></i> Add Profiles to Compare</h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="profile-input-card" id="profile1">
+                            <h5><i class="fas fa-user"></i> Profile 1</h5>
+                            <input type="url" class="form-control mb-2" placeholder="Enter profile URL" 
+                                   id="profileUrl1" onchange="validateProfile(1)">
+                            <div class="profile-preview" id="preview1" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-input-card" id="profile2">
+                            <h5><i class="fas fa-user"></i> Profile 2</h5>
+                            <input type="url" class="form-control mb-2" placeholder="Enter profile URL" 
+                                   id="profileUrl2" onchange="validateProfile(2)">
+                            <div class="profile-preview" id="preview2" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" id="additionalProfiles" style="display: none;">
+                    <div class="col-md-6">
+                        <div class="profile-input-card" id="profile3">
+                            <h5><i class="fas fa-user"></i> Profile 3 (Optional)</h5>
+                            <input type="url" class="form-control mb-2" placeholder="Enter profile URL" 
+                                   id="profileUrl3" onchange="validateProfile(3)">
+                            <div class="profile-preview" id="preview3" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <button class="btn btn-outline-secondary" onclick="hideAdditionalProfile()">
+                            <i class="fas fa-minus"></i> Remove Third Profile
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <button class="btn btn-outline-primary" onclick="showAdditionalProfile()" id="addProfileBtn">
+                        <i class="fas fa-plus"></i> Add Third Profile
+                    </button>
+                    <button class="btn btn-primary ms-3" onclick="compareProfiles()" id="compareBtn" disabled>
+                        <i class="fas fa-balance-scale"></i> Compare Profiles
+                    </button>
+                </div>
+                
+                <!-- Interest Selection -->
+                <div class="mt-4">
+                    <h5><i class="fas fa-heart"></i> Focus Areas (Optional)</h5>
+                    <p class="text-muted">Select areas to focus the comparison on:</p>
+                    <div class="interest-tags">
+                        <span class="interest-tag" data-interest="Data Science">Data Science</span>
+                        <span class="interest-tag" data-interest="Web Development">Web Development</span>
+                        <span class="interest-tag" data-interest="Mobile Development">Mobile Development</span>
+                        <span class="interest-tag" data-interest="DevOps">DevOps</span>
+                        <span class="interest-tag" data-interest="Product Management">Product Management</span>
+                        <span class="interest-tag" data-interest="Digital Marketing">Digital Marketing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <!-- Comparison Overview -->
+                <div class="profile-comparison-card">
+                    <h3><i class="fas fa-trophy"></i> Comparison Overview</h3>
+                    <div id="comparisonOverview"></div>
+                </div>
+
+                <!-- Score Comparison Chart -->
+                <div class="profile-comparison-card">
+                    <h4><i class="fas fa-chart-radar"></i> Score Comparison</h4>
+                    <canvas id="comparisonChart" class="comparison-chart"></canvas>
+                </div>
+
+                <!-- Detailed Comparison -->
+                <div id="detailedComparison"></div>
+
+                <!-- Insights -->
+                <div class="insight-card">
+                    <h4><i class="fas fa-lightbulb"></i> Key Insights</h4>
+                    <div id="comparisonInsights"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary me-2" onclick="downloadComparison()">
+                        <i class="fas fa-download"></i> Download Comparison
+                    </button>
+                    <button class="btn btn-outline-primary me-2" onclick="resetComparison()">
+                        <i class="fas fa-redo"></i> New Comparison
+                    </button>
+                    <button class="btn btn-success" onclick="generateBestPractices()">
+                        <i class="fas fa-star"></i> Best Practices Guide
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loadingSection" style="display: none;" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4 class="mt-3">Analyzing and Comparing Profiles...</h4>
+                <p>This may take a few moments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let validatedProfiles = {};
+        let selectedInterests = [];
+        
+        // Interest selection
+        document.querySelectorAll('.interest-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const interest = this.dataset.interest;
+                
+                if (this.classList.contains('selected')) {
+                    if (!selectedInterests.includes(interest)) {
+                        selectedInterests.push(interest);
+                    }
+                } else {
+                    selectedInterests = selectedInterests.filter(i => i !== interest);
+                }
+            });
+        });
+        
+        function validateProfile(profileNumber) {
+            const url = document.getElementById(`profileUrl${profileNumber}`).value;
+            const card = document.getElementById(`profile${profileNumber}`);
+            const preview = document.getElementById(`preview${profileNumber}`);
+            
+            if (url) {
+                card.classList.add('filled');
+                validatedProfiles[profileNumber] = url;
+                
+                // Show basic preview
+                const platform = detectPlatform(url);
+                preview.innerHTML = `
+                    <div class="text-success">
+                        <i class="fas fa-check-circle"></i> Valid ${platform} profile detected
+                    </div>
+                `;
+                preview.style.display = 'block';
+            } else {
+                card.classList.remove('filled');
+                delete validatedProfiles[profileNumber];
+                preview.style.display = 'none';
+            }
+            
+            // Enable compare button if at least 2 profiles
+            const compareBtn = document.getElementById('compareBtn');
+            compareBtn.disabled = Object.keys(validatedProfiles).length < 2;
+        }
+        
+        function detectPlatform(url) {
+            if (url.includes('linkedin.com')) return 'LinkedIn';
+            if (url.includes('github.com')) return 'GitHub';
+            if (url.includes('twitter.com') || url.includes('x.com')) return 'Twitter';
+            return 'Professional';
+        }
+        
+        function showAdditionalProfile() {
+            document.getElementById('additionalProfiles').style.display = 'block';
+            document.getElementById('addProfileBtn').style.display = 'none';
+        }
+        
+        function hideAdditionalProfile() {
+            document.getElementById('additionalProfiles').style.display = 'none';
+            document.getElementById('addProfileBtn').style.display = 'inline-block';
+            
+            // Clear third profile
+            document.getElementById('profileUrl3').value = '';
+            validateProfile(3);
+        }
+        
+        async function compareProfiles() {
+            const profileUrls = Object.values(validatedProfiles);
+            
+            if (profileUrls.length < 2) {
+                alert('Please add at least 2 profiles to compare');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/compare-profiles', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        profile_urls: profileUrls,
+                        user_interests: selectedInterests
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayComparisonResults(result);
+                } else {
+                    alert('Comparison failed: ' + result.error);
+                    resetToInput();
+                }
+                
+            } catch (error) {
+                alert('Error during comparison: ' + error.message);
+                resetToInput();
+            }
+        }
+        
+        function displayComparisonResults(result) {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // Display overview
+            displayOverview(result.comparison_results);
+            
+            // Create comparison chart
+            createComparisonChart(result.comparison_results);
+            
+            // Display detailed comparison
+            displayDetailedComparison(result.comparison_results);
+            
+            // Display insights
+            displayInsights(result.insights);
+        }
+        
+        function displayOverview(results) {
+            const container = document.getElementById('comparisonOverview');
+            let html = '<div class="row">';
+            
+            results.forEach((profile, index) => {
+                if (profile.error) {
+                    html += `
+                        <div class="col-md-4">
+                            <div class="text-center p-3 border rounded">
+                                <h6>Profile ${profile.profile_index}</h6>
+                                <div class="text-danger">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Error: ${profile.error}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const scoreClass = getScoreClass(profile.professional_score);
+                    html += `
+                        <div class="col-md-4">
+                            <div class="text-center p-3 border rounded position-relative">
+                                ${index === 0 ? '<div class="winner-badge"><i class="fas fa-crown"></i> Best</div>' : ''}
+                                <h6>${profile.platform.toUpperCase()} Profile ${profile.profile_index}</h6>
+                                <div class="score-badge ${scoreClass}">
+                                    ${Math.round(profile.professional_score)}/100
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">${profile.url}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function createComparisonChart(results) {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            
+            const validResults = results.filter(r => !r.error);
+            if (validResults.length === 0) return;
+            
+            // Get all section names
+            const allSections = new Set();
+            validResults.forEach(profile => {
+                Object.keys(profile.section_scores || {}).forEach(section => {
+                    allSections.add(section);
+                });
+            });
+            
+            const sectionLabels = Array.from(allSections);
+            const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+            
+            const datasets = validResults.map((profile, index) => ({
+                label: `${profile.platform} Profile ${profile.profile_index}`,
+                data: sectionLabels.map(section => profile.section_scores[section] || 0),
+                borderColor: colors[index % colors.length],
+                backgroundColor: colors[index % colors.length] + '20',
+                pointBackgroundColor: colors[index % colors.length],
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: colors[index % colors.length]
+            }));
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: sectionLabels.map(label => label.replace('_', ' ').toUpperCase()),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function displayDetailedComparison(results) {
+            const container = document.getElementById('detailedComparison');
+            const validResults = results.filter(r => !r.error);
+            
+            if (validResults.length < 2) {
+                container.innerHTML = '<p class="text-warning">Not enough valid profiles for detailed comparison</p>';
+                return;
+            }
+            
+            let html = '<div class="profile-comparison-card"><h4><i class="fas fa-list"></i> Detailed Analysis</h4>';
+            
+            // Strengths comparison
+            html += '<h5 class="mt-4">Strengths Comparison</h5><div class="row">';
+            validResults.forEach(profile => {
+                html += `
+                    <div class="col-md-6">
+                        <h6>${profile.platform} Profile ${profile.profile_index}</h6>
+                        <ul class="list-unstyled">
+                `;
+                (profile.strengths || []).forEach(strength => {
+                    html += `<li><i class="fas fa-check text-success"></i> ${strength}</li>`;
+                });
+                html += '</ul></div>';
+            });
+            html += '</div>';
+            
+            // Weaknesses comparison
+            html += '<h5 class="mt-4">Areas for Improvement</h5><div class="row">';
+            validResults.forEach(profile => {
+                html += `
+                    <div class="col-md-6">
+                        <h6>${profile.platform} Profile ${profile.profile_index}</h6>
+                        <ul class="list-unstyled">
+                `;
+                (profile.weaknesses || []).forEach(weakness => {
+                    html += `<li><i class="fas fa-exclamation-triangle text-warning"></i> ${weakness}</li>`;
+                });
+                html += '</ul></div>';
+            });
+            html += '</div></div>';
+            
+            container.innerHTML = html;
+        }
+        
+        function displayInsights(insights) {
+            const container = document.getElementById('comparisonInsights');
+            
+            if (!insights || insights.message) {
+                container.innerHTML = '<p>' + (insights?.message || 'No insights available') + '</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            if (insights.best_performing) {
+                html += `
+                    <div class="mb-3">
+                        <h6><i class="fas fa-trophy text-warning"></i> Best Performing Profile</h6>
+                        <p>${insights.best_performing.platform} Profile ${insights.best_performing.profile_index} 
+                           with a score of ${Math.round(insights.best_performing.professional_score)}/100</p>
+                    </div>
+                `;
+            }
+            
+            if (insights.common_strengths && insights.common_strengths.length > 0) {
+                html += `
+                    <div class="mb-3">
+                        <h6><i class="fas fa-star text-success"></i> Common Strengths</h6>
+                        <ul>
+                `;
+                insights.common_strengths.forEach(strength => {
+                    html += `<li>${strength}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            if (insights.common_weaknesses && insights.common_weaknesses.length > 0) {
+                html += `
+                    <div class="mb-3">
+                        <h6><i class="fas fa-exclamation-triangle text-warning"></i> Common Areas for Improvement</h6>
+                        <ul>
+                `;
+                insights.common_weaknesses.forEach(weakness => {
+                    html += `<li>${weakness}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function getScoreClass(score) {
+            if (score >= 85) return 'score-excellent';
+            if (score >= 70) return 'score-good';
+            if (score >= 55) return 'score-fair';
+            return 'score-poor';
+        }
+        
+        function resetToInput() {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+        }
+        
+        function resetComparison() {
+            // Clear all inputs
+            document.getElementById('profileUrl1').value = '';
+            document.getElementById('profileUrl2').value = '';
+            document.getElementById('profileUrl3').value = '';
+            
+            // Reset validation
+            validatedProfiles = {};
+            document.querySelectorAll('.profile-input-card').forEach(card => {
+                card.classList.remove('filled');
+            });
+            document.querySelectorAll('.profile-preview').forEach(preview => {
+                preview.style.display = 'none';
+            });
+            
+            // Reset interests
+            selectedInterests = [];
+            document.querySelectorAll('.interest-tag').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+            
+            // Hide additional profiles
+            hideAdditionalProfile();
+            
+            // Reset to input section
+            resetToInput();
+            
+            // Disable compare button
+            document.getElementById('compareBtn').disabled = true;
+        }
+        
+        function downloadComparison() {
+            // Create downloadable comparison report
+            const reportData = {
+                timestamp: new Date().toISOString(),
+                profiles_compared: Object.values(validatedProfiles),
+                comparison_focus: selectedInterests,
+                // Add more comparison data here
+            };
+            
+            const blob = new Blob([JSON.stringify(reportData, null, 2)], {
+                type: 'application/json'
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `profile-comparison-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function generateBestPractices() {
+            alert('Best Practices Guide feature coming soon!');
+        }
+    </script>
+</body>
+</html>

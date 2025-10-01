@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Recommendations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Job Recommendations</h1>
+            <a href="/dashboard/{{ resume_id }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Back to Dashboard
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Skills Match -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Your Top Skills</h2>
+                <div class="flex flex-wrap gap-2">
+                    {% set skills = [] %}
+                    {% if resume_data.parsed_data.skills %}
+                        {% if resume_data.parsed_data.skills is mapping %}
+                            {% for category, skill_list in resume_data.parsed_data.skills.items() %}
+                                {% if skill_list is iterable and skill_list is not string %}
+                                    {% for skill in skill_list %}
+                                        {% set _ = skills.append(skill) %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% elif resume_data.parsed_data.skills is iterable %}
+                            {% for skill in resume_data.parsed_data.skills %}
+                                {% set _ = skills.append(skill) %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if skills %}
+                        {% for skill in skills[:10] %}
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
+                            {{ skill }}
+                        </span>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-500">No skills extracted from resume</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recommended Roles -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Recommended Roles</h2>
+                <div class="space-y-4">
+                    {% if recommendations.roles %}
+                        {% for role in recommendations.roles %}
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="font-medium text-lg">{{ role.title }}</h3>
+                            <p class="text-gray-600 text-sm">Match Score: {{ role.match_score }}%</p>
+                            <p class="mt-2">{{ role.description }}</p>
+                            {% if role.salary_range %}
+                            <p class="text-gray-600 text-sm mt-1">Salary Range: {{ role.salary_range }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-500">No role recommendations available at this time.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Industry Insights -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Industry Insights</h2>
+                <div class="space-y-4">
+                    {% if recommendations.industry_insights %}
+                        {% for insight in recommendations.industry_insights %}
+                        <div class="p-4 bg-gray-50 rounded">
+                            <h3 class="font-medium">{{ insight.title }}</h3>
+                            <p class="text-gray-700 mt-2">{{ insight.description }}</p>
+                            {% if insight.growth_rate %}
+                            <p class="text-green-600 text-sm mt-1">Growth Rate: {{ insight.growth_rate }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-500">No industry insights available at this time.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Skills Gap Analysis -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Skills Gap Analysis</h2>
+                {% if recommendations.skill_analysis %}
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="font-medium mb-2 text-green-700">Current Strengths</h3>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in recommendations.skill_analysis.current_strengths %}
+                                <span class="bg-green-100 text-green-800 text-sm px-2 py-1 rounded">
+                                    {{ skill }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium mb-2 text-yellow-700">Development Areas</h3>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in recommendations.skill_analysis.development_areas %}
+                                <span class="bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
+                                    {{ skill }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium mb-2 text-purple-700">Emerging Skills</h3>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in recommendations.skill_analysis.emerging_skills %}
+                                <span class="bg-purple-100 text-purple-800 text-sm px-2 py-1 rounded">
+                                    {{ skill }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-gray-500">No skill analysis available.</p>
+                {% endif %}
+            </div>
+
+            <!-- Career Path -->
+            <div class="bg-white rounded-lg shadow p-6 col-span-full">
+                <h2 class="text-xl font-bold mb-4">Suggested Career Path</h2>
+                {% if recommendations.career_path %}
+                <div class="relative">
+                    <!-- Timeline -->
+                    <div class="absolute left-8 top-0 h-full w-0.5 bg-blue-200"></div>
+                    
+                    <div class="space-y-8">
+                        {% for step in recommendations.career_path %}
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-16 h-16 rounded-full bg-blue-500 text-white flex items-center justify-center relative z-10 text-sm">
+                                {{ step.timeline }}
+                            </div>
+                            <div class="ml-8">
+                                <h3 class="font-medium text-lg">{{ step.role }}</h3>
+                                <p class="text-gray-600">{{ step.description }}</p>
+                                {% if step.required_skills %}
+                                <div class="mt-2">
+                                    <p class="text-sm font-medium">Required Skills:</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        {% for skill in step.required_skills %}
+                                        <span class="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded">
+                                            {{ skill }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                    <p class="text-gray-500">No career path recommendations available at this time.</p>
+                {% endif %}
+            </div>
+
+            <!-- Action Items -->
+            <div class="bg-white rounded-lg shadow p-6 col-span-full">
+                <h2 class="text-xl font-bold mb-4">Next Steps</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 bg-blue-50 rounded">
+                        <h3 class="font-medium text-blue-800">Update Your Resume</h3>
+                        <p class="text-sm text-blue-600 mt-1">Optimize for the roles you're targeting</p>
+                        <a href="/improve-resume/{{ resume_id }}" class="text-blue-500 text-sm hover:underline">Improve Resume →</a>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded">
+                        <h3 class="font-medium text-green-800">Practice Interviews</h3>
+                        <p class="text-sm text-green-600 mt-1">Prepare for your target roles</p>
+                        <a href="/interview-prep/{{ resume_id }}" class="text-green-500 text-sm hover:underline">Start Prep →</a>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded">
+                        <h3 class="font-medium text-purple-800">Network & Apply</h3>
+                        <p class="text-sm text-purple-600 mt-1">Create tailored cover letters</p>
+                        <a href="/cover-letter/{{ resume_id }}" class="text-purple-500 text-sm hover:underline">Write Letter →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>Recommendations are based on your resume data and current market trends.</p>
+            <p>For best results, ensure your resume is up to date with your latest skills and experience.</p>
+        </div>
+    </div>
+</body>
+</html>

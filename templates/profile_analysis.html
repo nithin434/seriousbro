@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Analysis • SYNTEXA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        /* Brand colors */
+        .brand-syn { color: #10b981; }
+        .brand-texa { color: #111827; }
+        
+        /* Card styles */
+        .card { 
+            background: white; 
+            border-radius: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: all 0.3s ease;
+        }
+        .card:hover { 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px solid #d1d5db;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-secondary:hover {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Input styles */
+        .form-input {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        /* Interest tag styles */
+        .interest-tag {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            color: #047857;
+            border: 1px solid #10b981;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .interest-tag:hover {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            transform: scale(1.05);
+        }
+        .interest-tag .remove {
+            margin-left: 0.5rem;
+            color: #ef4444;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interest-tag .remove:hover {
+            color: #dc2626;
+            transform: scale(1.2);
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Header styles */
+        .header-btn { 
+            padding: 0.5rem 1rem; 
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            text-decoration: none;
+            border: 2px solid transparent;
+        }
+        .header-btn.primary { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .header-btn.primary:hover { 
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .header-btn.secondary { 
+            background: #f8fafc; 
+            color: #10b981; 
+            border-color: #10b981;
+        }
+        .header-btn.secondary:hover { 
+            background: #10b981; 
+            color: white;
+            border-color: #10b981;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-200/60 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center group">
+                    <span class="text-2xl font-extrabold tracking-tight transition-transform group-hover:scale-105">
+                        <span class="brand-syn">SYN</span><span class="brand-texa">TEXA</span>
+                    </span>
+                    <span class="ml-3 text-sm font-medium text-gray-500 border-l border-gray-300 pl-3">AI Career Tools</span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="/my-resumes" class="header-btn secondary flex items-center">
+                    <i class="fas fa-file-alt mr-2"></i>My Resumes
+                </a>
+                <a href="/settings" class="header-btn secondary flex items-center">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
+                <i class="fas fa-chart-line text-emerald-600 mr-3"></i>
+                <span class="gradient-text">Profile Analysis</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Get AI-powered insights to optimize your professional presence and boost your career opportunities with comprehensive analysis and actionable recommendations.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Analysis Form -->
+            <div class="card p-8">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3 flex items-center">
+                        <div class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-search text-white text-sm"></i>
+                        </div>
+                        Start Your Analysis
+                    </h2>
+                    <p class="text-gray-600">Enter your professional profile URL to begin comprehensive analysis</p>
+                </div>
+                
+                <form id="analysisForm" class="space-y-6">
+                    <div>
+                        <label for="profileUrl" class="block text-sm font-semibold text-gray-700 mb-3">
+                            <i class="fas fa-link mr-2 text-emerald-600"></i>Profile URL
+                        </label>
+                        <input 
+                            type="url" 
+                            id="profileUrl" 
+                            name="profileUrl" 
+                            class="form-input"
+                            placeholder="https://linkedin.com/in/your-profile" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
+                            <i class="fas fa-heart mr-2 text-emerald-600"></i>Areas of Interest <span class="text-gray-500 font-normal">(Optional)</span>
+                        </label>
+                        <div class="flex gap-3 mb-3">
+                            <input 
+                                type="text" 
+                                id="interestInput" 
+                                class="form-input flex-1"
+                                placeholder="e.g., Data Science, Machine Learning"
+                            >
+                            <button type="button" class="btn-secondary" onclick="addInterest()">
+                                <i class="fas fa-plus mr-1"></i>Add
+                            </button>
+                        </div>
+                        <div id="interestsList" class="min-h-[2rem]"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary w-full relative" id="analyzeBtn">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        <span>Analyze Profile</span>
+                    </button>
+                </form>
+                
+                <!-- Loading State -->
+                <div id="loadingDiv" class="hidden text-center py-8">
+                    <div class="loading-spinner"></div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Analyzing Your Profile</h3>
+                    <p class="text-gray-600 mb-4">Our AI is gathering comprehensive insights...</p>
+                    <div class="bg-blue-50 p-4 rounded-lg text-left">
+                        <p class="text-sm text-blue-700 font-medium mb-2">What we're analyzing:</p>
+                        <ul class="text-sm text-blue-600 space-y-1">
+                            <li><i class="fas fa-check mr-2"></i>Professional headline and summary</li>
+                            <li><i class="fas fa-check mr-2"></i>Skills and expertise assessment</li>
+                            <li><i class="fas fa-check mr-2"></i>Experience and achievement analysis</li>
+                            <li><i class="fas fa-check mr-2"></i>Network and visibility metrics</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Error Display -->
+                <div id="errorDiv"></div>
+            </div>
+
+            <!-- Features & Examples -->
+            <div class="space-y-6">
+                <!-- Features Card -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                        <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-magic text-white text-xs"></i>
+                        </div>
+                        What You'll Get
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-chart-bar text-green-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Performance Scores</h4>
+                                <p class="text-gray-600 text-sm">Professional and visibility ratings with detailed breakdown</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-lightbulb text-blue-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Quick Wins</h4>
+                                <p class="text-gray-600 text-sm">Immediate actions to boost your profile impact</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-road text-purple-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Growth Strategy</h4>
+                                <p class="text-gray-600 text-sm">Long-term recommendations for career advancement</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-certificate text-orange-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Skill Enhancement</h4>
+                                <p class="text-gray-600 text-sm">Certification and skill recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Examples Card -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                        <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-link text-white text-xs"></i>
+                        </div>
+                        Supported Platforms
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors" onclick="fillExample('linkedin')">
+                            <div class="flex items-center">
+                                <i class="fab fa-linkedin text-blue-600 text-xl mr-3"></i>
+                                <span class="font-medium text-gray-900">LinkedIn Profile</span>
+                            </div>
+                            <i class="fas fa-arrow-right text-gray-400"></i>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors" onclick="fillExample('github')">
+                            <div class="flex items-center">
+                                <i class="fab fa-github text-gray-700 text-xl mr-3"></i>
+                                <span class="font-medium text-gray-900">GitHub Profile</span>
+                            </div>
+                            <i class="fas fa-arrow-right text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ATS Resume Generator Promotion -->
+                <div class="card p-6 bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-200">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-file-pdf text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Need an ATS-Optimized Resume?</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Create a professional, ATS-friendly resume that gets past automated screening systems.</p>
+                        <a href="/my-resumes" class="btn-primary inline-flex items-center">
+                            <i class="fas fa-magic mr-2"></i>
+                            Generate ATS Resume
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userInterests = [];
+        
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authManager.isAuthenticated()) {
+                authManager.redirectToLogin();
+            }
+        });
+        
+        function addInterest() {
+            const input = document.getElementById('interestInput');
+            const interest = input.value.trim();
+            
+            if (interest && !userInterests.includes(interest)) {
+                userInterests.push(interest);
+                input.value = '';
+                updateInterestsList();
+            }
+        }
+        
+        function removeInterest(interest) {
+            userInterests = userInterests.filter(item => item !== interest);
+            updateInterestsList();
+        }
+        
+        function updateInterestsList() {
+            const list = document.getElementById('interestsList');
+            if (userInterests.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 text-sm italic">No interests added yet</p>';
+            } else {
+                list.innerHTML = userInterests.map(interest => 
+                    `<span class="interest-tag">
+                        <i class="fas fa-tag mr-1"></i>${interest}
+                        <span class="remove" onclick="removeInterest('${interest}')">&times;</span>
+                    </span>`
+                ).join('');
+            }
+        }
+        
+        function fillExample(platform) {
+            const input = document.getElementById('profileUrl');
+            if (platform === 'linkedin') {
+                input.value = 'https://linkedin.com/in/your-profile';
+            } else if (platform === 'github') {
+                input.value = 'https://github.com/username';
+            }
+            // Add visual feedback
+            input.focus();
+            input.select();
+        }
+        
+        // Allow adding interest with Enter key
+        document.getElementById('interestInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addInterest();
+            }
+        });
+        
+        // Handle form submission
+        document.getElementById('analysisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const profileUrl = document.getElementById('profileUrl').value.trim();
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const loadingDiv = document.getElementById('loadingDiv');
+            const errorDiv = document.getElementById('errorDiv');
+            const formContainer = document.querySelector('.card');
+            
+            if (!profileUrl) {
+                showError('Please enter a valid profile URL');
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Analyzing...</span>';
+            formContainer.style.display = 'none';
+            loadingDiv.classList.remove('hidden');
+            errorDiv.innerHTML = '';
+            
+            try {
+                const response = await authManager.authFetch('/api/analyze-profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        profile_url: profileUrl,
+                        user_interests: userInterests
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store in localStorage for fallback
+                    localStorage.setItem('lastProfileAnalysis', JSON.stringify({
+                        profile_url: profileUrl,
+                        platform: data.platform,
+                        timestamp: new Date().toISOString()
+                    }));
+                    
+                    // Redirect to results page with URL parameters
+                    const resultsUrl = `/profile-results?profile_url=${encodeURIComponent(profileUrl)}&platform=${encodeURIComponent(data.platform)}`;
+                    window.location.href = resultsUrl;
+                } else {
+                    showError(data.error || 'Analysis failed. Please try again.');
+                    resetForm();
+                }
+            } catch (error) {
+                console.error('Analysis error:', error);
+                showError('Network error. Please check your connection and try again.');
+                resetForm();
+            }
+        });
+        
+        function resetForm() {
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const loadingDiv = document.getElementById('loadingDiv');
+            const formContainer = document.querySelector('.card');
+            
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<i class="fas fa-chart-line mr-2"></i><span>Analyze Profile</span>';
+            loadingDiv.classList.add('hidden');
+            formContainer.style.display = 'block';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorDiv');
+            errorDiv.innerHTML = `
+                <div class="mt-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl">
+                    <div class="flex items-start">
+                        <div class="w-6 h-6 bg-red-100 rounded-lg flex items-center justify-center mr-3 mt-0.5">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-red-900 mb-1">Analysis Error</h4>
+                            <p class="text-red-700 text-sm">${message}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Initialize interests list display
+        updateInterestsList();
+    </script>
+</body>
+</html>

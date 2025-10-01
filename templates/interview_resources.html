@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Resources - Resume AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .rotate-90 { transform: rotate(90deg); }
+        .transition-transform { transition: transform 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-xl font-bold">Resume AI</a>
+                <a href="/dashboard/{{ resume_id }}" class="text-blue-500">Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto space-y-8">
+            <!-- Debug Info Section -->
+            <div id="debugSection" class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div class="flex items-center cursor-pointer" onclick="toggleDebug()">
+                    <svg id="debugArrow" class="w-4 h-4 mr-2 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <h3 class="text-sm font-medium text-gray-700">Debug Info (Resources Data)</h3>
+                </div>
+                <div id="debugContent" class="hidden mt-3">
+                    <pre id="debugJson" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-auto max-h-96 whitespace-pre-wrap">{{ resources | tojson(indent=2) }}</pre>
+                </div>
+            </div>
+
+            <!-- Technical Resources -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Technical Learning Resources</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for resource in resources.technical_resources %}
+                    <div class="border rounded-lg p-4">
+                        <h3 class="font-medium text-lg mb-2">{{ resource.topic }}</h3>
+                        <div class="space-y-2">
+                            {% for item in resource.resources %}
+                            <a href="{{ item.url }}" target="_blank" 
+                               class="block p-2 hover:bg-gray-50 rounded transition-colors">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-blue-600 font-medium">{{ item.name }}</p>
+                                        <p class="text-sm text-gray-600">{{ item.type | title }}</p>
+                                    </div>
+                                    <span class="text-xs px-2 py-1 bg-gray-100 rounded">
+                                        {{ item.difficulty | title }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">{{ item.estimated_duration }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Interview Preparation -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Interview Preparation Resources</h2>
+                <div class="space-y-6">
+                    {% for category in resources.interview_preparation %}
+                    <div>
+                        <h3 class="font-medium text-lg mb-3">{{ category.category }}</h3>
+                        <div class="grid gap-4">
+                            {% for resource in category.resources %}
+                            <a href="{{ resource.url }}" target="_blank"
+                               class="block p-4 border rounded-lg hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-blue-600 font-medium">{{ resource.name }}</p>
+                                        <p class="text-sm text-gray-600">{{ resource.type | title }}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {% for topic in resource.key_topics %}
+                                    <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                                        {{ topic }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recommended Platforms -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold mb-4">Recommended Learning Platforms</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for platform in resources.recommended_platforms %}
+                    <a href="{{ platform.url }}" target="_blank"
+                       class="block p-4 border rounded-lg hover:shadow-md transition-shadow">
+                        <h3 class="font-medium text-lg text-blue-600">{{ platform.name }}</h3>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex flex-wrap gap-2">
+                                {% for area in platform.focus_areas %}
+                                <span class="text-xs px-2 py-1 bg-gray-100 rounded">
+                                    {{ area }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                {{ platform.subscription_type | title }}
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDebug() {
+            const debugContent = document.getElementById('debugContent');
+            const debugArrow = document.getElementById('debugArrow');
+            
+            if (debugContent.classList.contains('hidden')) {
+                debugContent.classList.remove('hidden');
+                debugArrow.classList.add('rotate-90');
+            } else {
+                debugContent.classList.add('hidden');
+                debugArrow.classList.remove('rotate-90');
+            }
+        }
+    </script>
+</body>
+</html>

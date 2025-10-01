@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Syntexa.app | AI-Powered Career Optimization</title>
+    <meta name="description" content="Join Syntexa.app - The AI-powered platform that optimizes your career with resume analysis, professional insights, and job matching. Create your account today.">
+    <meta name="keywords" content="Syntexa, career optimization, AI resume analysis, job matching, professional development, career growth">
+    <meta name="author" content="Syntexa.app">
+    <meta property="og:title" content="Sign Up - Syntexa.app | AI-Powered Career Optimization">
+    <meta property="og:description" content="Join thousands of professionals optimizing their careers with AI-powered resume analysis and job matching.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syntexa.app/signup">
+    <meta property="og:site_name" content="Syntexa.app">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sign Up - Syntexa.app">
+    <meta name="twitter:description" content="AI-powered career optimization platform">
+    <link rel="icon" type="image/x-icon" href="https://syntexa.app/favicon.ico">
+    <link rel="apple-touch-icon" href="https://syntexa.app/apple-touch-icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="/static/js/auth.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .brand-syn { color: #059669; }
+        .brand-texa { color: #111827; }
+        .auth-container {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f9fafb 100%);
+            min-height: 100vh;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        .form-input:focus {
+            border-color: #059669;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+        .btn-primary {
+            background: #059669;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #059669;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .alert {
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .alert-error {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #059669;
+            border: 1px solid #bbf7d0;
+        }
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        .strength-weak { background-color: #ef4444; }
+        .strength-medium { background-color: #f59e0b; }
+        .strength-strong { background-color: #059669; }
+    </style>
+</head>
+<body class="auth-container">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="flex justify-center items-center mb-6">
+                    <span class="text-4xl font-extrabold tracking-tight">
+                        <span class="brand-syn">Syn</span><span class="brand-texa">texa</span>
+                    </span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
+                <p class="text-gray-600">Join thousands of professionals optimizing their careers with AI-powered insights</p>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-card p-8">
+                <form id="signupForm" class="space-y-6">
+                    <!-- Alert Container -->
+                    <div id="alertContainer" class="hidden"></div>
+
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">
+                                First Name
+                            </label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                name="firstName"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="John"
+                            >
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Last Name
+                            </label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Doe"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="john@example.com"
+                            >
+                            <i class="fas fa-envelope absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Create a strong password"
+                                minlength="8"
+                            >
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                class="absolute right-3 top-4 text-gray-400 hover:text-gray-600"
+                            >
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                        <div id="passwordStrength" class="password-strength mt-2"></div>
+                        <div id="passwordFeedback" class="text-sm text-gray-500 mt-1"></div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Confirm Password
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                required
+                                class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none"
+                                placeholder="Confirm your password"
+                            >
+                            <i class="fas fa-lock absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                        <div id="passwordMatch" class="text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <!-- Terms and Privacy -->
+                    <div class="flex items-start">
+                        <input
+                            id="terms"
+                            name="terms"
+                            type="checkbox"
+                            required
+                            class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded mt-1"
+                        >
+                        <label for="terms" class="ml-3 block text-sm text-gray-700">
+                            I agree to the 
+                            <a href="https://syntexa.app/terms" target="_blank" class="text-emerald-600 hover:text-emerald-500 font-medium">Terms of Service</a>
+                            and 
+                            <a href="https://syntexa.app/privacy" target="_blank" class="text-emerald-600 hover:text-emerald-500 font-medium">Privacy Policy</a>
+                            of Syntexa.app
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button
+                            type="submit"
+                            id="signupBtn"
+                            class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                        >
+                            <span id="signupBtnText">Create Account</span>
+                            <div id="signupSpinner" class="loading-spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Already have an account?
+                            <a href="/login" class="font-semibold text-emerald-600 hover:text-emerald-500">
+                                Sign in
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Features -->
+            <div class="text-center">
+                <p class="text-sm text-gray-500 mb-4">What you'll get with Syntexa.app</p>
+                <div class="grid grid-cols-1 gap-2 text-xs text-gray-600">
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-chart-line text-emerald-600 mr-2"></i>
+                        <span>AI-powered resume analysis and optimization</span>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-robot text-emerald-600 mr-2"></i>
+                        <span>Professional profile roasting and insights</span>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-briefcase text-emerald-600 mr-2"></i>
+                        <span>Job matching and interview preparation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Verification Modal -->
+    <div id="verificationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <i class="fas fa-envelope-open text-emerald-600 text-4xl mb-4"></i>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Verify Your Email</h3>
+                <p class="text-gray-600">We've sent a verification code to your email address</p>
+            </div>
+            
+            <form id="verificationForm">
+                <div class="mb-4">
+                    <label for="otp" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Verification Code
+                    </label>
+                    <input
+                        type="text"
+                        id="otp"
+                        required
+                        maxlength="6"
+                        class="form-input w-full px-4 py-3 rounded-lg border focus:outline-none text-center text-lg tracking-widest"
+                        placeholder="000000"
+                    >
+                </div>
+                
+                <div class="flex gap-3 mb-4">
+                    <button
+                        type="submit"
+                        id="verifyBtn"
+                        class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                    >
+                        Verify Email
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-sm text-gray-500 mb-2">Didn't receive the code?</p>
+                    <button
+                        type="button"
+                        id="resendCode"
+                        class="text-emerald-600 hover:text-emerald-500 font-medium text-sm"
+                    >
+                        Resend Code
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form elements
+        const signupForm = document.getElementById('signupForm');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const signupBtn = document.getElementById('signupBtn');
+        const signupBtnText = document.getElementById('signupBtnText');
+        const signupSpinner = document.getElementById('signupSpinner');
+        const alertContainer = document.getElementById('alertContainer');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordFeedback = document.getElementById('passwordFeedback');
+        const passwordMatch = document.getElementById('passwordMatch');
+        
+        // Modal elements
+        const verificationModal = document.getElementById('verificationModal');
+        const verificationForm = document.getElementById('verificationForm');
+        const otpInput = document.getElementById('otp');
+        const resendCode = document.getElementById('resendCode');
+
+        let userEmail = '';
+
+        // Password toggle functionality
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let feedback = [];
+
+            if (password.length >= 8) strength++;
+            else feedback.push('At least 8 characters');
+
+            if (/[A-Z]/.test(password)) strength++;
+            else feedback.push('One uppercase letter');
+
+            if (/[a-z]/.test(password)) strength++;
+            else feedback.push('One lowercase letter');
+
+            if (/[0-9]/.test(password)) strength++;
+            else feedback.push('One number');
+
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            else feedback.push('One special character');
+
+            return { strength, feedback };
+        }
+
+        // Update password strength indicator
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            const { strength, feedback } = checkPasswordStrength(password);
+
+            // Update strength bar
+            passwordStrength.style.width = (strength / 5) * 100 + '%';
+            
+            if (strength <= 2) {
+                passwordStrength.className = 'password-strength strength-weak';
+                passwordFeedback.textContent = 'Weak: ' + feedback.join(', ');
+                passwordFeedback.className = 'text-sm text-red-500 mt-1';
+            } else if (strength <= 4) {
+                passwordStrength.className = 'password-strength strength-medium';
+                passwordFeedback.textContent = 'Medium: ' + feedback.join(', ');
+                passwordFeedback.className = 'text-sm text-yellow-600 mt-1';
+            } else {
+                passwordStrength.className = 'password-strength strength-strong';
+                passwordFeedback.textContent = 'Strong password!';
+                passwordFeedback.className = 'text-sm text-green-600 mt-1';
+            }
+        });
+
+        // Check password match
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                passwordMatch.textContent = 'Passwords do not match';
+                passwordMatch.className = 'text-sm text-red-500 mt-1';
+                passwordMatch.classList.remove('hidden');
+                return false;
+            } else if (confirmPassword && password === confirmPassword) {
+                passwordMatch.textContent = 'Passwords match';
+                passwordMatch.className = 'text-sm text-green-600 mt-1';
+                passwordMatch.classList.remove('hidden');
+                return true;
+            } else {
+                passwordMatch.classList.add('hidden');
+                return true;
+            }
+        }
+
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+        passwordInput.addEventListener('input', checkPasswordMatch);
+
+        // Show alert function
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            alertContainer.classList.remove('hidden');
+        }
+
+        // Hide alert function
+        function hideAlert() {
+            alertContainer.classList.add('hidden');
+        }
+
+        // Set loading state
+        function setLoading(loading) {
+            if (loading) {
+                signupBtnText.textContent = 'Creating Account...';
+                signupSpinner.classList.remove('hidden');
+                signupBtn.disabled = true;
+            } else {
+                signupBtnText.textContent = 'Create Account';
+                signupSpinner.classList.add('hidden');
+                signupBtn.disabled = false;
+            }
+        }
+
+        // Signup form submission
+        signupForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlert();
+
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Validation
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                showAlert('Please fill in all fields');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match');
+                return;
+            }
+
+            const { strength } = checkPasswordStrength(password);
+            if (strength < 3) {
+                showAlert('Please choose a stronger password');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.token) {
+                        // Store token and redirect immediately (no email verification needed)
+                        TokenManager.setToken(data.token, false);
+                        showAlert('Account created successfully! Redirecting to dashboard...', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 1000);
+                    } else {
+                        // Fallback - show verification modal if token not provided
+                        userEmail = email;
+                        showAlert('Account created successfully! Please verify your email.', 'success');
+                        setTimeout(() => {
+                            verificationModal.classList.remove('hidden');
+                            verificationModal.classList.add('flex');
+                        }, 1000);
+                    }
+                } else {
+                    showAlert(data.error || 'Registration failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showAlert('Network error. Please check your connection and try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Email verification form submission
+        verificationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const otp = otpInput.value.trim();
+            
+            if (!otp || otp.length !== 6) {
+                alert('Please enter a valid 6-digit code');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        otp: otp
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Email verified successfully! You can now sign in.');
+                    window.location.href = '/login';
+                } else {
+                    alert(data.error || 'Invalid verification code');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Resend verification code
+        resendCode.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userEmail
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Verification code resent!');
+                } else {
+                    alert(data.error || 'Failed to resend code');
+                }
+            } catch (error) {
+                console.error('Resend error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>

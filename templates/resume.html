@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Builder</title>
+</head>
+<body>
+    <h1>Resume Builder</h1>
+    <a href="/">Back to Home</a>
+
+    <h2>Generate Resume</h2>
+    <form id="resumeForm">
+        <h3>Personal Information</h3>
+        <input type="text" name="full_name" placeholder="Full Name" required>
+        <input type="text" name="professional_title" placeholder="Professional Title" required>
+        
+        <h3>Contact Information</h3>
+        <input type="email" name="contact_info[email]" placeholder="Email" required>
+        <input type="tel" name="contact_info[phone]" placeholder="Phone" required>
+        <input type="text" name="contact_info[linkedin]" placeholder="LinkedIn URL">
+        
+        <h3>Professional Summary</h3>
+        <textarea name="professional_summary" rows="4" placeholder="Brief overview of your professional background"></textarea>
+        
+        <h3>Work Experience</h3>
+        <div id="experienceFields">
+            <div class="experience-entry">
+                <input type="text" name="work_experience[0][title]" placeholder="Job Title">
+                <input type="text" name="work_experience[0][company]" placeholder="Company">
+                <input type="text" name="work_experience[0][dates]" placeholder="Duration (e.g., 2020-present)">
+                <textarea name="work_experience[0][achievements]" placeholder="Key achievements (one per line)"></textarea>
+            </div>
+        </div>
+        <button type="button" onclick="addExperienceField()">Add More Experience</button>
+
+        <h3>Education</h3>
+        <input type="text" name="education[degree]" placeholder="Degree">
+        <input type="text" name="education[school]" placeholder="School">
+        <input type="text" name="education[year]" placeholder="Year">
+
+        <h3>Skills</h3>
+        <textarea name="skills" rows="4" placeholder="List your key skills (comma separated)"></textarea>
+
+        <h3>Industry & Preferences</h3>
+        <input type="text" name="industry" placeholder="Industry (e.g., technology, healthcare)">
+        <select name="preferred_format">
+            <option value="modern">Modern</option>
+            <option value="traditional">Traditional</option>
+        </select>
+
+        <h3>Job Description (Optional)</h3>
+        <textarea name="job_description" rows="4" placeholder="Paste the job description to target your resume"></textarea>
+
+        <button type="submit">Generate Resume</button>
+    </form>
+
+    <div id="result"></div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Resume Parser</h2>
+                        
+                        <!-- Upload Form -->
+                        <form id="resumeUploadForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="resumeFile" class="form-label">Upload Resume</label>
+                                <input type="file" class="form-control" id="resumeFile" 
+                                       name="resume" accept=".pdf,.docx,.doc" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload & Parse</button>
+                        </form>
+                        
+                        <!-- Status Display -->
+                        <div id="uploadStatus" class="alert mt-3" style="display: none;"></div>
+                        
+                        <!-- Parsed Resume Display -->
+                        <div id="parsedResume" class="mt-4" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let experienceCount = 1;
+
+        function addExperienceField() {
+            const container = document.getElementById('experienceFields');
+            const newField = document.createElement('div');
+            newField.className = 'experience-entry';
+            newField.innerHTML = `
+                <input type="text" name="work_experience[${experienceCount}][title]" placeholder="Job Title">
+                <input type="text" name="work_experience[${experienceCount}][company]" placeholder="Company">
+                <input type="text" name="work_experience[${experienceCount}][dates]" placeholder="Duration">
+                <textarea name="work_experience[${experienceCount}][achievements]" placeholder="Key achievements"></textarea>
+            `;
+            container.appendChild(newField);
+            experienceCount++;
+        }
+
+        document.getElementById('resumeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            // Convert FormData to nested object structure
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('[')) {
+                    const parts = key.split(/[\[\]]+/);
+                    let current = data;
+                    for (let i = 0; i < parts.length - 1; i++) {
+                        const part = parts[i];
+                        if (part) {
+                            if (!(part in current)) {
+                                current[part] = parts[i + 1] ? {} : value;
+                            }
+                            current = current[part];
+                        }
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            try {
+                const response = await fetch('/api/resume/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('result').innerHTML = `
+                        <h3>Generated Resume</h3>
+                        <pre>${result.resume}</pre>
+                        <h4>ATS Score: ${result.ats_score}</h4>
+                        <h4>Suggestions:</h4>
+                        <ul>
+                            ${result.suggestions.keyword_optimization.map(kw => `<li>${kw}</li>`).join('')}
+                        </ul>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <h3>Error</h3>
+                        <p>${result.error}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

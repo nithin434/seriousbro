@@ -1,0 +1,132 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+venv_backup/
+.venv_backup/
+
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Flask
+instance/
+.webassets-cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+database/
+mongodb_data/
+
+# Logs
+*.log
+logs/
+debug_data/
+
+# Uploads
+uploads/
+temp/
+temporary/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node modules (if any frontend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# AI/ML Models (if any large files)
+*.pkl
+*.joblib
+models/
+checkpoints/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# API Keys and Secrets
+config/secrets.json
+secrets/
+*.key
+*.pem
+alz\
+prayana\
+neo\
+cryptomod\
+alz\
+neo\
+#remove zip file Cr
+# AL (from original)
+.alcache/
+.alpackages/
+.snapshots/
+.output/
+*.app
+rad.json
+*.g.xlf
+*.flf
+TestResults.xml
+# Ignore PDF files
+*.pdf
+
+# Ignore log files
+
+# Ignore config files
+*.conf

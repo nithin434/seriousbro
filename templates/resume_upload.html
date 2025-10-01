@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Parser</title>
+</head>
+<body>
+    <h1>Resume Parser</h1>
+    <a href="/">Back to Home</a>
+
+    <form id="resumeUploadForm" enctype="multipart/form-data">
+        <h3>Upload Resume</h3>
+        <input type="file" name="resume" accept=".pdf" required>
+        <button type="submit">Parse Resume</button>
+    </form>
+
+    <div id="result" style="display: none;">
+        <h3>Parsed Information</h3>
+        <pre id="parsedData"></pre>
+        
+        <div id="contactInfo">
+            <h4>Contact Information</h4>
+            <ul id="contactList"></ul>
+        </div>
+        
+        <div id="skills">
+            <h4>Skills</h4>
+            <div id="skillCategories"></div>
+        </div>
+        
+        <button onclick="saveToDatabase()">Save to Database</button>
+    </div>
+
+    <script>
+        document.getElementById('resumeUploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/api/resume/parse', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('result').style.display = 'block';
+                    
+                    // Display contact info
+                    const contactList = document.getElementById('contactList');
+                    contactList.innerHTML = Object.entries(result.contact_info)
+                        .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
+                        .join('');
+                    
+                    // Display skills
+                    const skillsDiv = document.getElementById('skillCategories');
+                    skillsDiv.innerHTML = Object.entries(result.skills)
+                        .map(([category, skills]) => `
+                            <div class="skill-category">
+                                <h5>${category}</h5>
+                                <ul>
+                                    ${skills.map(skill => `<li>${skill}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `)
+                        .join('');
+                    
+                    // Store parsed data for later use
+                    window.parsedData = result;
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while parsing the resume');
+            }
+        });
+
+        async function saveToDatabase() {
+            if (!window.parsedData) {
+                alert('No parsed data available');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/resume/save', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(window.parsedData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Resume data saved successfully!');
+                } else {
+                    alert(`Error saving data: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while saving to database');
+            }
+        }
+    </script>
+</body>
+</html>

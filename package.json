@@ -1,0 +1,23 @@
+{
+  "name": "GEt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "manual_session_creator.js",
+  "scripts": {
+    "start": "node manual_session_creator.js",
+    "dev": "node manual_session_creator.js",
+    "dev:headless": "HEADLESS=true node manual_session_creator.js",
+    "dev:headed": "xvfb-run -a node manual_session_creator.js",
+    "install-browsers": "npx playwright install",
+    "install-deps": "npx playwright install-deps",
+    "install-xvfb": "sudo apt-get update && sudo apt-get install -y xvfb",
+    "setup": "npm run install-browsers && npm run install-deps",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.54.2"
+  }
+}

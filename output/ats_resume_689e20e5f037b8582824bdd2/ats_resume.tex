@@ -1,0 +1,249 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Nithin kumar Reddy} \\ \vspace{1pt}
+    PULIVENDLA, Andhra Pradesh, 516390, India \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91 9347632259 ~ \href{mailto:nithinjambula89@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{nithinjambula89@gmail.com}} ~ 
+    \href{https://www.linkedin.com/in/nithin-086nxnhnW}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/nithin-086nxnhnW}}  ~
+    \href{https://github.com/nithin891233t}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/nithin891233t}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute of Technology Andhra Pradesh}{2023 -- 2027}
+      {B. Tech in Computer Science and Engineering}{None}
+  \resumeSubHeadingListEnd
+
+
+
+%------RELEVANT COURSEWORK-------
+\section{Relevant Coursework}
+    \begin{multicols}{4}
+        \begin{itemize}[itemsep=-5pt, parsep=3pt]
+            \item\small Machine Learning
+            \item\small Deep Learning
+            \item\small Natural Language Processing (NLP)
+            \item\small Data Analysis
+            \item\small Data Visualization
+            \item\small Data Science
+            \item\small Probability
+            \item\small Statics
+            \item\small Neural Networks
+            \item\small Classification Algorithms
+            \item\small Computer Vision
+            \item\small Regression Models
+            \item\small Data Management
+            \item\small Data Processing
+        \end{itemize}
+    \end{multicols}
+    \vspace*{2.0\multicolsep}
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Prasunet Company (LOR)}{Jun 2024 -- Jul 2024}
+      {Data Science Intern}{None}
+      \resumeItemListStart
+        \resumeItem{Developed a Logistic Regression model to predict terrain as Hill or Valley with 95.2\% accuracy.}
+        \resumeItem{Performed Data Analytics, Data Science tasks, and managed data using pandas.}
+        \resumeItem{Contributed to data visualization for the project.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {YBI Foundation}{None}
+      {Marketing Team Member}{None}
+      \resumeItemListStart
+        \resumeItem{Engaged in marketing initiatives for SEDS to promote technical and non-technical events.}
+        \resumeItem{Developed and implemented marketing strategies that increased brand awareness and fostered club culture.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Integrated Decision-Making Framework} $|$ \emph{TensorFlow, Scikit-learn, Deep Neural Networks, OpenSMILE, LLaMA, Mask R-CNN, Haar Cascades, Geospatial libraries, AWS, AWS Lambda, Librosa, Pandas, NumPy, Apache Kafka}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed an intelligent decision-making system using LLMs and data analytics for proactive responses.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Screen-Automate} $|$ \emph{Python, Speech Recognition, Computer Vision, Web Automation, Natural Language Processing (NLP), Git}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed a hands-free system enabling screen interaction through voice commands, hand gestures, and automated web actions using Machine learning Algorithms}
+            \resumeItem{Integrated techniques such as semantic segmentation, object detection, and risk assessment to evaluate potential hazards and quantify damage.}
+            \resumeItem{Employed pose estimation and emotion recognition through voice and facial expression analysis.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Echo-Sight} $|$ \emph{YOLOv8, Computer Vision, AWS cloud}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed a wearable device to enhance mobility and safety for visually impaired individuals.}
+            \resumeItem{Leveraged a YOLOv8 fine-tuned, the system is trained on a custom dataset featuring over 40 classes, including essential road elements such as potholes and speed breakers with accuracy of around 80\%.}
+            \resumeItem{Tested and deployed in AWS cloud.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Cold Mail Generator} $|$ \emph{Gemini API, Hugging Face, Machine Learning, Natural Language Processing (NLP), Python, streamlit, Git, LLMs}}{None}
+          \resumeItemListStart
+            \resumeItem{Developed an advanced cold email generator using LLMs to automate and optimize the job application process.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Hill Valley Prediction} $|$ \emph{Logistic regression, Data Analytics, Data Science, Machine Learning, Data management, Visualization, pandas}}{Jun 2024 -- Jul 2024}
+          \resumeItemListStart
+            \resumeItem{Predicted terrain using Logistic Regression with 95.2\% accuracy.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{House price estimation} $|$ \emph{Machine Learning}}{Jul 2024 -- Aug 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a model for house price estimation}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Grouping Customers data based on their purchases} $|$ \emph{Machine Learning}}{Jul 2024 -- Aug 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a model for grouping customers based on purchase data.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{SVM classification for Identification of cats and dogs} $|$ \emph{SVM, Machine Learning}}{Jul 2024 -- Aug 2024}
+          \resumeItemListStart
+            \resumeItem{Developed an SVM classification model for identifying cats and dogs.}
+          \resumeItemListEnd 
+          \vspace{-13pt}
+      \resumeProjectHeading
+          {\textbf{Food recognition and calorie estimation based on the items} $|$ \emph{Machine Learning, TensorFlow}}{Jul 2024 -- Aug 2024}
+          \resumeItemListStart
+            \resumeItem{Developed a model for food recognition and calorie estimation.}
+          \resumeItemListEnd 
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{Python, C++, SQL} \\
+     \textbf{Frameworks}{TensorFlow, Pytorch, Flask} \\
+     \textbf{Tools}{Git, MYSQL, AWS, AWS Lambda} \\
+     \textbf{Skills}{Machine Learning, AI, Deep Learning, Natural Language Processing (NLP), Data Analysis, Data Visualization, Data Science, Probability, statics, Neural Networks, Project Management, Classification Algorithms, Adaptability, Problem-Solving, Communication, Team Lead, Computer Vision, Data processing, Data Management, Regression modals, Team work, Data Analytics, Matlab, Marketing strategies, Analytical Skills, Social Media Management, Brand Management,Digital Marketing} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+
+
+
+
+\end{document}
