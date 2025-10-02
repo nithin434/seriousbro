@@ -827,9 +827,10 @@ def parse_resume():
             }), 400
         
         # Save file temporarily
-        os.makedirs('uploads', exist_ok=True)
+        uploads_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+        os.makedirs(uploads_dir, exist_ok=True)
         filename = secure_filename(file.filename)
-        filepath = os.path.join('uploads', filename)
+        filepath = os.path.join(uploads_dir, filename)
         file.save(filepath)
         
         try:

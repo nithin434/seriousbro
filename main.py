@@ -96,7 +96,7 @@ def setup_logging():
 logger = setup_logging()
 
 # Constants
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 ALLOWED_EXTENSIONS = {'.pdf', '.doc', '.docx'}
 
 def is_api_request():
@@ -204,7 +204,7 @@ def create_app():
             return str(obj)
     
     # Ensure upload directory exists
-    # os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     
     # Log database pool initialization
     logger.info("Initializing application components with database pooling...")
